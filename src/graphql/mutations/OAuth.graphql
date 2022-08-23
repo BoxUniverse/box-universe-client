@@ -1,0 +1,5 @@
+mutation OAuth($OAuthInput: OAuthInput!) {
+  OAuth(OAuthInput: $OAuthInput) {
+    _id
+  }
+}
