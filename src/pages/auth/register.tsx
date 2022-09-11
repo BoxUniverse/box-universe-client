@@ -10,6 +10,7 @@ import {
   IoKeyOutline,
   IoMailOutline,
   IoPersonOutline,
+  IoWarningOutline,
 } from 'react-icons/io5';
 import { Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
 import '@styles/AuthLayout.module.scss';
@@ -18,8 +19,10 @@ import RegisterSchema from '@validations/RegisterSchema';
 import AuthLayout from '@layouts/AuthLayout';
 import { NextPageWithLayout } from '../_app';
 import { useMutation } from '@apollo/client';
-import createUser from '@mutations/createUser.graphql';
+import _register from '@mutations/register.graphql';
+import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
+import { toast } from 'react-toastify';
 
 type Inputs = {
   username: string;
@@ -36,15 +39,61 @@ const Register: NextPageWithLayout = () => {
     mode: 'onChange',
     resolver: yupResolver(RegisterSchema),
   });
-  const [createUserMutation] = useMutation(createUser);
+  const router = useRouter();
+
+  const [registerMutation, { data, error }] = useMutation(_register, {
+    errorPolicy: 'all',
+  });
+
+  if (error) {
+    toast.error(error.message, {
+      position: 'top-right',
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark',
+      icon: <IoWarningOutline size={20} className="text-purple-500" />,
+      bodyClassName: 'bg-transparent',
+      className: 'bg-transparent backdrop-blur-sm border-purple-500',
+      pauseOnFocusLoss: false,
+    });
+  }
+  if (data) {
+    toast.success(
+      'Sign up successfull, you will be automation redirected to login after 2 seconds !',
+      {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        icon: <IoWarningOutline size={20} className="text-purple-500" />,
+        bodyClassName: 'bg-transparent',
+        className: 'bg-transparent backdrop-blur-sm border-purple-500',
+        pauseOnFocusLoss: false,
+        onClose: () => {
+          router.push('/auth/login');
+        },
+      },
+    );
+  }
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const { username, password, email } = data;
-    createUserMutation({
+    registerMutation({
       variables: {
-        userInput: {
+        createInput: {
           username,
           password,
           email,
+          provider: {
+            type: 'local',
+          },
         },
       },
     });

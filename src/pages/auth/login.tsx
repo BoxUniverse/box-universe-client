@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   IoArrowForwardOutline,
   IoEyeOffOutline,
@@ -23,6 +24,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useThrottle from '@hooks/useThrottle';
 import { signIn } from 'next-auth/react';
+import FacebookLogo from '@images/facebook.svg';
+import GoogleLogo from '@images/google.png';
+import DiscordLogo from '@images/discord.png';
+import GithubLogo from '@images/github.png';
 
 type Inputs = { username: string; password: string };
 const Login: NextPageWithLayout = () => {
@@ -41,7 +46,8 @@ const Login: NextPageWithLayout = () => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await signIn('credentials', { username, password, redirect: true });
+      const response = await signIn('credentials', { username, password, redirect: false });
+
       const error = response?.error;
 
       if (error) return Promise.reject(new Error('Unauthorizied'));
@@ -64,7 +70,7 @@ const Login: NextPageWithLayout = () => {
             },
             progressClassName: 'bg-purple-500',
             onClose: () => {
-              router.push('/', undefined, { shallow: true });
+              // router.push('/', undefined, { shallow: true });
             },
           },
           error: {
@@ -191,7 +197,7 @@ const Login: NextPageWithLayout = () => {
               />
             </div>
           </FormGroup>
-          <FormGroup className="flex flex-row justify-self-start self-start mt-5">
+          <FormGroup className="flex flex-row justify-self-start self-start mt-1">
             <FormControlLabel
               control={<Checkbox defaultChecked className="text-purple-500" />}
               label={
@@ -202,7 +208,7 @@ const Login: NextPageWithLayout = () => {
               className="text-white text-xs"
             />
           </FormGroup>
-          <FormGroup className="mt-5 h-fit justify-self-start self-start ">
+          <FormGroup className="mt-1 h-fit justify-self-start self-start ">
             <div className="buttonIcon relative hover:bg-purple-500 rounded-lg w-fit ">
               <input
                 type="submit"
@@ -216,34 +222,62 @@ const Login: NextPageWithLayout = () => {
             </div>
           </FormGroup>
 
-          <FormGroup className="flex text-white justify-center flex-col items-center mb-5 mt-2">
+          <FormGroup className="flex text-white justify-center flex-col items-center mb-5 mt-1">
             <div className="flex flex-row items-center mb-2">
               <div className="h-1 w-16 border-y border-purple-500 mr-3 border-t-transparent"></div>
               <span className="uppercase">login with</span>
               <div className="h-1 w-16 border-y ml-3 border-purple-500 border-t-transparent"></div>
             </div>
-            <div className="flex-row flex justify-around w-full mb-3">
-              <IoLogoGoogle
-                size={30}
-                className="text-red-500 cursor-pointer"
-                onClick={() => {
-                  signIn('google');
-                }}
-              />
-              <IoLogoFacebook
-                size={30}
-                onClick={() => {
-                  signIn('facebook');
-                }}
-                className="text-cyan-500 cursor-pointer"
-              />
-              <IoLogoGithub
-                className="text-black cursor-pointer"
-                size={30}
-                onClick={() => {
-                  signIn('github');
-                }}
-              />
+
+            <div className="flex-row flex justify-around w-full mb-1">
+              <div className="social-authentication">
+                <Image
+                  className="cursor-pointer"
+                  onClick={() => {
+                    signIn('facebook');
+                  }}
+                  src={FacebookLogo}
+                  alt="logo-facebook"
+                  width={35}
+                  height={35}
+                />
+              </div>
+              <div className="social-authentication">
+                <Image
+                  className="cursor-pointer"
+                  onClick={() => {
+                    signIn('google');
+                  }}
+                  src={GoogleLogo}
+                  alt="logo-google"
+                  width={35}
+                  height={35}
+                />
+              </div>
+              <div className="social-authentication">
+                <Image
+                  className="cursor-pointer"
+                  onClick={() => {
+                    signIn('discord');
+                  }}
+                  src={DiscordLogo}
+                  alt="logo-discord"
+                  width={35}
+                  height={35}
+                />
+              </div>
+              <div className="social-authentication">
+                <Image
+                  className="cursor-pointer"
+                  onClick={() => {
+                    signIn('github');
+                  }}
+                  src={GithubLogo}
+                  alt="logo-github"
+                  width={35}
+                  height={35}
+                />
+              </div>
             </div>
           </FormGroup>
 
