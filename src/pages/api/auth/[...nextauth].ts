@@ -5,12 +5,9 @@ import FacebookProvider from '@providers/FacebookProvider';
 import GoogleProvider from '@providers/GoogleProvider';
 import GithubProvider from '@providers/GithubProvider';
 import * as crypto from 'crypto';
-
 import client from '@src/ApolloClient';
 import OAuth from '@mutations/OAuth.graphql';
-import login from '@mutations/login.graphql';
-
-import { random } from 'lodash';
+import DiscordProvider from '@providers/DiscordProvider';
 
 export const cookiesOptions: CookieSerializeOptions = {
   sameSite: 'lax',
@@ -20,7 +17,13 @@ export const cookiesOptions: CookieSerializeOptions = {
 };
 
 export const authOptions: NextAuthOptions = {
-  providers: [CredentialsProvider, FacebookProvider, GoogleProvider, GithubProvider],
+  providers: [
+    CredentialsProvider,
+    FacebookProvider,
+    GoogleProvider,
+    GithubProvider,
+    DiscordProvider,
+  ],
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60 * 24 * 14,
@@ -51,13 +54,14 @@ export const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account.provider) {
+    async signIn({ user, account }) {
+      if (account.provider !== 'credentials') {
         const username = user.email?.split('@')[0];
         const data = `${user.id}.${account.provider}.${process.env.SECRET}`;
         const hash = crypto.createHash('md5').update(data).digest('hex');
+
         try {
-          await client.mutate({
+          const result = await client.mutate({
             mutation: OAuth,
             variables: {
               OAuthInput: {
@@ -70,12 +74,9 @@ export const authOptions: NextAuthOptions = {
             },
           });
         } catch (error: any) {
-          console.log(error);
-
           return false;
         }
       }
-
       return !!user;
     },
     async session({ session, token }) {
