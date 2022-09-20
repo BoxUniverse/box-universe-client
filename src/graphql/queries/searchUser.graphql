@@ -1,0 +1,6 @@
+query searchUser($searchInput: Search!) {
+  searchUser(searchInput: $searchInput) {
+    name
+    id
+  }
+}

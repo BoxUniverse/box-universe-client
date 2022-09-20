@@ -5,14 +5,14 @@ import { IoSearchOutline } from 'react-icons/io5';
 const ListFriend = () => {
   const x = 5;
   return (
-    <div className="fixed bottom-1 z-50 ml-24 h-5/6 px-3 overflow-x-hidden overflow-scroll backdrop-blur-md  rounded-xl">
+    <div className="fixed bottom-1 z-30 ml-24 h-5/6 px-3 backdrop-blur-md  rounded-xl">
       <div className="mt-1 ml-2">
         <div className="uppercase text-xl border-b pb-3 h-11 w-24 whitespace-nowrap">
           <span className="text-white">FRIENDS</span>
         </div>
       </div>
 
-      <div className="mt-5 relative w-fit flex items-center ">
+      <div className="mt-5 w-fit flex items-center relative ">
         <input
           name="search"
           placeholder="Search Friend"
@@ -27,7 +27,7 @@ const ListFriend = () => {
           size={20}
         />
       </div>
-      <div className="list-friends ">
+      <div className="list-friends h-3/4 overflow-scroll ">
         <Friend />
         <Friend />
         <Friend />
