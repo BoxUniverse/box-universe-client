@@ -1,7 +1,6 @@
-import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
-import { NextRequest, NextResponse } from 'next/server';
+import { withAuth } from 'next-auth/middleware';
 
-export default withAuth(function middleware(req: NextRequestWithAuth) {}, {
+export default withAuth(function middleware() {}, {
   callbacks: {
     authorized: function ({ token }) {
       return !!token;

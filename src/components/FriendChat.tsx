@@ -3,7 +3,6 @@ import { Avatar, Badge } from '@mui/material';
 import avatar from '@images/logo.png';
 
 const FriendChat = () => {
-
   return (
     <div className="friend mt-7 mb-3 flex flex-row w-64 justify-start items-center text-white  cursor-pointer">
       <Badge

@@ -10,8 +10,6 @@ import { changePage } from '@features/app/appSlice';
 import ListFriendChat from '@components/ListFriendChat';
 import Image from 'next/image';
 import Sidebar from '@components/Sidebar';
-import { useAuth } from '@contexts/AuthContext';
-import withAuth from '../middlewares/auth';
 
 type Props = {
   children: ReactNode;
@@ -41,6 +39,7 @@ const MainLayout = (props: Props) => {
         <Topbar page={page} />
         <Sidebar page={page} />
         {page === 'home' && <ListFriend />}
+        {page === 'profile' && <ListFriend />}
         {page === 'chat' && <ListFriendChat />}
         <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
           <div className="ml-24  h-full mt-0 flex flex-row">
@@ -50,6 +49,7 @@ const MainLayout = (props: Props) => {
           </div>
         </div>
         {page === 'home' && <ListRequest />}
+        {page === 'profile' && <ListRequest />}
       </div>
     </>
   );

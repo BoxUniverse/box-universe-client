@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from '@images/logo.png';
 import Image from 'next/image';
-import { IoSearchOutline } from 'react-icons/io5';
+import { SearchBar } from '@components/SearchBar';
 
 type Props = {
   page: string;
@@ -9,7 +9,7 @@ type Props = {
 export const Topbar = (props: Props) => {
   const { page } = props;
   return (
-    <div className="fixed text-white left-2 top-0 h-1/6 w-full flex flex-row justify-between pr-5 backdrop-blur-sm z-50">
+    <div className="fixed text-white left-2 top-0 h-1/6 w-full flex flex-row justify-between pr-5  before:absolute before:backdrop-blur-md before:top-0 before:left-0 before:-z-10 before:w-full before:h-full z-50">
       <div className="flex flex-row">
         <div className="flex  w-20 h-full justify-center items-center ">
           <Image src={logo.src} alt="logo" width={80} height={80} layout="intrinsic" />
@@ -22,21 +22,7 @@ export const Topbar = (props: Props) => {
       <div className="flex items-center ">
         <span className="tracking-widest text-xl uppercase">{page}</span>
       </div>
-      <div className="searchBar relative w-fit flex items-center ">
-        <input
-          name="search"
-          placeholder="EXPLORE UNIVERSE"
-          id="username"
-          className="placeholder:select-none neon text-lg align-middle placeholder:text-sm placeholder:uppercase w-56 h-12 bg-transparent rounded-lg focus: outline-0  pl-10 pr-12 border-purple-500"
-          autoComplete="off"
-          spellCheck="false"
-        />
-        <IoSearchOutline
-          color="white"
-          className="absolute top-1/2 transform -translate-y-1/2 ml-3 "
-          size={20}
-        />
-      </div>
+      <SearchBar />
     </div>
   );
 };
