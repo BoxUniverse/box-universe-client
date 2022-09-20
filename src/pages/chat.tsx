@@ -14,7 +14,6 @@ import MessageReceiver from '@components/MessageReceiver';
 import MainLayout from '@layouts/MainLayout';
 import Head from 'next/head';
 import { NextPageWithLayout } from './_app';
-import withAuth from '@middlewares/auth';
 
 const Chat: NextPageWithLayout = () => {
   const [showIcon, setShowIcon] = useState<boolean>(false);

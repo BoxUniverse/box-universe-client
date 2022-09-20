@@ -144,3 +144,22 @@ input {
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
+.search-blur {
+  /* box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); */
+  /* backdrop-filter: blur(13px); */
+  /* -webkit-backdrop-filter: blur(13px); */
+  background-color: rgba(168, 85, 247, 0.3);
+  /* z-index: 999999; */
+}
+
+.topbar::before {
+  content: '';
+  position: absolute;
+  backdrop-filter: blur(13px);
+  -webkit-backdrop-filter: blur(13px);
+  top: 0;
+  z-index: -1;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
