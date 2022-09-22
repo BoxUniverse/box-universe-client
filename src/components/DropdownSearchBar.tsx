@@ -1,4 +1,4 @@
-import { forwardRef, SetStateAction, useEffect, useState } from 'react';
+import { forwardRef, SetStateAction, useEffect } from 'react';
 import _ from 'lodash';
 import ItemDropdownSearchBar from './ItemDropdownSearchBar';
 
@@ -11,7 +11,6 @@ const DropdownSearchBar = (
   ref: React.RefObject<HTMLDivElement>,
 ) => {
   const { data, handleFocusInput, refInput } = props;
-  console.log(data);
 
   useEffect(() => {
     /**
@@ -21,14 +20,12 @@ const DropdownSearchBar = (
       if (ref.current && !ref.current.contains(event.target)) {
         if (_.isEqual(refInput.current, event.target)) return;
 
-        // alert('You clicked outside of me!');
         handleFocusInput(false);
       }
     }
-    // Bind the event listener
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
