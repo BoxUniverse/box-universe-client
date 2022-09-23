@@ -20,7 +20,6 @@ import AuthLayout from '@layouts/AuthLayout';
 import { NextPageWithLayout } from '../_app';
 import { useMutation } from '@apollo/client';
 import _register from '@mutations/register.graphql';
-import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
 import { toast } from 'react-toastify';
 

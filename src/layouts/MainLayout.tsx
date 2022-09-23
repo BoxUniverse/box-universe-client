@@ -10,6 +10,7 @@ import { changePage } from '@features/app/appSlice';
 import ListFriendChat from '@components/ListFriendChat';
 import Image from 'next/image';
 import Sidebar from '@components/Sidebar';
+import { BaseLayout } from '@layouts/BaseLayout';
 
 type Props = {
   children: ReactNode;
@@ -28,29 +29,31 @@ const MainLayout = (props: Props) => {
 
   return (
     <>
-      <Image
-        id="bg"
-        className="fixed top-0 left-0 min-w-full min-h-full"
-        src={bg.src}
-        alt=""
-        layout="fill"
-      />
-      <div className="wrapLayout flex h-full w-full">
-        <Topbar page={page} />
-        <Sidebar page={page} />
-        {page === 'home' && <ListFriend />}
-        {page === 'profile' && <ListFriend />}
-        {page === 'chat' && <ListFriendChat />}
-        <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
-          <div className="ml-24  h-full mt-0 flex flex-row">
-            <div className="w-full flex justify-center">
-              <div className="w-6/12">{children}</div>
+      <BaseLayout>
+        <Image
+          id="bg"
+          className="fixed top-0 left-0 min-w-full min-h-full"
+          src={bg.src}
+          alt=""
+          layout="fill"
+        />
+        <div className="wrapLayout flex h-full w-full">
+          <Topbar page={page} />
+          <Sidebar page={page} />
+          {page === 'home' && <ListFriend />}
+          {page === 'profile' && <ListFriend />}
+          {page === 'chat' && <ListFriendChat />}
+          <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
+            <div className="ml-24  h-full mt-0 flex flex-row">
+              <div className="w-full flex justify-center">
+                <div className="w-6/12">{children}</div>
+              </div>
             </div>
           </div>
+          {page === 'home' && <ListRequest />}
+          {page === 'profile' && <ListRequest />}
         </div>
-        {page === 'home' && <ListRequest />}
-        {page === 'profile' && <ListRequest />}
-      </div>
+      </BaseLayout>
     </>
   );
 };

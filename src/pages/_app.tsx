@@ -10,6 +10,7 @@ import { ApolloProvider } from '@apollo/client';
 import client from '../ApolloClient';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SessionProvider } from 'next-auth/react';
+import 'react-toastify/dist/ReactToastify.css';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

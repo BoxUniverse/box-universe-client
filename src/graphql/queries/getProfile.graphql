@@ -1,0 +1,8 @@
+query getProfile($profileInput: Obtain!) {
+  getProfile(profileInput: $profileInput) {
+    id
+    name
+    email
+    provider
+  }
+}

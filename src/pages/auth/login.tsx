@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -8,9 +7,6 @@ import {
   IoEyeOffOutline,
   IoEyeOutline,
   IoKeyOutline,
-  IoLogoFacebook,
-  IoLogoGithub,
-  IoLogoGoogle,
   IoPersonOutline,
   IoWarningOutline,
 } from 'react-icons/io5';
@@ -31,8 +27,6 @@ import GithubLogo from '@images/github.png';
 
 type Inputs = { username: string; password: string };
 const Login: NextPageWithLayout = () => {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
