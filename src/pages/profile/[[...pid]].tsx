@@ -6,18 +6,20 @@ import ProfileInformation from '@components/ProfileInformation';
 import client from '@src/ApolloClient';
 import { GetServerSideProps } from 'next';
 import _getProfile from '@queries/getProfile.graphql';
+import { getSession } from 'next-auth/react';
 
 type NextPageProps = {
   data: any;
+  me: boolean;
 };
 
-const Profile: NextPageWithLayout = ({ data }: NextPageProps) => {
+const Profile: NextPageWithLayout = ({ data, me }: NextPageProps) => {
   return (
     <div>
       <Head>
         <title>Profile</title>
       </Head>
-      <ProfileInformation data={data.getProfile} />
+      <ProfileInformation data={data.getProfile} me={me} />
     </div>
   );
 };
@@ -26,8 +28,16 @@ Profile.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { pid } = context.params;
-  const { data, error } = (await client.query({
+  const { params } = context;
+  const session = await getSession(context);
+  const pid = params.pid?.[0] || session.sub;
+  let me = false;
+
+  if (!params.pid?.[0] || pid === session.sub) {
+    me = true;
+  }
+
+  const { data } = (await client.query({
     query: _getProfile,
     variables: {
       profileInput: {
@@ -36,12 +46,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     errorPolicy: 'all',
   })) as any;
-  console.log(error, data);
 
   if (data) {
     return {
       props: {
         data,
+        me,
       },
     };
   }
