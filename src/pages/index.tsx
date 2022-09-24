@@ -4,13 +4,8 @@ import Newsfeed from '@components/Newsfeed';
 import MainLayout from '@layouts/MainLayout';
 import Head from 'next/head';
 import { NextPageWithLayout } from './_app';
-import { useSession } from 'next-auth/react';
 
 const Home: NextPageWithLayout = () => {
-  const { data: session, status } = useSession();
-  //
-  console.log(session);
-
   return (
     <>
       <Head>

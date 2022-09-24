@@ -56,16 +56,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account.provider !== 'credentials') {
-        const username = user.email?.split('@')[0];
         const data = `${user.id}.${account.provider}.${process.env.SECRET}`;
         const hash = crypto.createHash('md5').update(data).digest('hex');
 
         try {
-          const result = await client.mutate({
+          await client.mutate({
             mutation: OAuth,
             variables: {
               OAuthInput: {
-                username,
+                name: user.name,
                 email: user.email,
                 nonce: hash,
                 provider: account.provider,
@@ -74,24 +73,26 @@ export const authOptions: NextAuthOptions = {
             },
           });
         } catch (error: any) {
+          console.log(error);
           return false;
         }
       }
       return !!user;
     },
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       session.username = token.username;
       session.email = token.email;
       session._id = token._id;
       session.user!.name = token.username as string;
+      session.user!.name = token.name as string;
       session.user!.email = token.email as string;
-      return session;
+      return { ...session, ...token, ...user };
     },
     async jwt({ token, user }) {
       if (user?.username) {
         token.username = user.username;
+        token.name = user.name;
         token.email = user.email;
-        token._id = user._id;
       }
 
       return token;
