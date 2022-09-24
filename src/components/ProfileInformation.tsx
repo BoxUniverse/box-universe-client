@@ -12,7 +12,12 @@ import {
 import Input from '@components/Input';
 import useToast from '@hooks/useToast';
 
-const ProfileInformation = ({ data }: any) => {
+type Props = {
+  data: any;
+  me: boolean;
+};
+
+const ProfileInformation = ({ data, me }: Props) => {
   const toast = useToast();
   return (
     <div className="flex justify-center flex-col items-center">
@@ -20,10 +25,12 @@ const ProfileInformation = ({ data }: any) => {
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         badgeContent={
-          <IoPersonAdd
-            size={20}
-            className="text-lg w-9 p-2.5 h-9 rounded-full bg-purple-500 cursor-pointer"
-          />
+          !me && (
+            <IoPersonAdd
+              size={20}
+              className="text-lg w-9 p-2.5 h-9 rounded-full bg-purple-500 cursor-pointer"
+            />
+          )
         }>
         <Avatar alt="Travis Howard" src={avatar.src} sx={{ width: 80, height: 80 }} />
       </Badge>
@@ -47,7 +54,7 @@ const ProfileInformation = ({ data }: any) => {
       <div className="divider h-0.5 mt-5 text-purple-500 bg-purple-500 w-full"></div>
       <div className="form-information pt-5 [&>div.group-form]:pb-5">
         <div className="group-form flex flex-col justify-center">
-          <label className="uppercase">username</label>
+          <label className="uppercase">name</label>
           <Input
             value={data.name}
             width="w-full"
