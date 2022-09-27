@@ -1,8 +1,9 @@
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 
 import Cookies from 'js-cookie';
 
-const httpLink = new HttpLink({
+const httpLink = createUploadLink({
   uri: 'http://172.26.22.101:3000/graphql',
 });
 const authLink = new ApolloLink((operation, forward) => {

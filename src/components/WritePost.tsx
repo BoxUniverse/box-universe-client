@@ -2,7 +2,7 @@ import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState } from 
 import { IoHappyOutline, IoImageOutline, IoVideocamOutline } from 'react-icons/io5';
 import 'emoji-mart-next/css/emoji-mart.css';
 
-// @ts-ignore
+// @ts-nocheck
 import { Picker } from 'emoji-mart-next';
 
 const WritePost = () => {

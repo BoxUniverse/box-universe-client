@@ -3,12 +3,14 @@ import searchUser from '@queries/searchUser.graphql';
 import { useLazyQuery } from '@apollo/client';
 import DropdownSearchBar from './DropdownSearchBar';
 import { IoSearchOutline } from 'react-icons/io5';
+import { useSession } from 'next-auth/react';
 
 export const SearchBar = () => {
   const [keyword, setKeyword] = useState<string>('');
   const [isFocus, setFocus] = useState<boolean>(false);
   const inputSearchRef = useRef<HTMLInputElement>(null);
   const dropdownRef = React.createRef<HTMLDivElement>();
+  const { data: session } = useSession();
 
   const [findUser, { data }] = useLazyQuery(searchUser);
 
@@ -29,7 +31,9 @@ export const SearchBar = () => {
     const kw = event.currentTarget.value;
     if (data) {
       const re = new RegExp(`.*${kw}.*`, 'i');
-      const listUserFilter = data.searchUser.filter((user: any) => re.test(user.name));
+      const listUserFilter = data.searchUser.filter(
+        (user: any) => re.test(user.name) && user.id !== session.sub,
+      );
       setListUser(listUserFilter);
     }
   };

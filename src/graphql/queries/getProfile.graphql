@@ -4,5 +4,6 @@ query getProfile($profileInput: Obtain!) {
     name
     email
     provider
+    avatar
   }
 }

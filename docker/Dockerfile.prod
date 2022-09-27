@@ -3,7 +3,6 @@ WORKDIR /client
 COPY ./client/package.json .
 RUN yarn install --production
 COPY ./client .
-RUN yarn build
 CMD ["yarn", "start"]
 EXPOSE 5000
 
