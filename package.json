@@ -18,6 +18,7 @@
     "@mui/material": "^5.9.1",
     "@mui/styled-engine-sc": "^5.8.0",
     "@reduxjs/toolkit": "^1.8.3",
+    "apollo-upload-client": "^17.0.0",
     "classnames": "^2.3.1",
     "cookie": "^0.5.0",
     "emoji-mart": "^5.1.0",

@@ -7,6 +7,9 @@ import client from '@src/ApolloClient';
 import { GetServerSideProps } from 'next';
 import _getProfile from '@queries/getProfile.graphql';
 import { getSession } from 'next-auth/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, StoreDispatch } from '@stores/app';
+import { update } from '@features/user/userSlice';
 
 type NextPageProps = {
   data: any;
@@ -14,12 +17,14 @@ type NextPageProps = {
 };
 
 const Profile: NextPageWithLayout = ({ data, me }: NextPageProps) => {
+  const user = useSelector<RootState>((state) => state.userSlice.user) as Object;
+
   return (
     <div>
       <Head>
         <title>Profile</title>
       </Head>
-      <ProfileInformation data={data.getProfile} me={me} />
+      <ProfileInformation data={data ? data.getProfile : user} me={me} />
     </div>
   );
 };
@@ -31,10 +36,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { params } = context;
   const session = await getSession(context);
   const pid = params.pid?.[0] || session.sub;
+
   let me = false;
 
   if (!params.pid?.[0] || pid === session.sub) {
     me = true;
+
+    return {
+      props: {
+        data: null,
+        me,
+      },
+    };
   }
 
   const { data } = (await client.query({
@@ -46,21 +59,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
     errorPolicy: 'all',
   })) as any;
-
-  if (data) {
-    return {
-      props: {
-        data,
-        me,
-      },
-    };
-  }
   return {
-    redirect: {
-      permanent: false,
-      destination: '/',
+    props: {
+      data,
+      me,
     },
-    props: {},
   };
 };
 

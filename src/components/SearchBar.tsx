@@ -31,7 +31,6 @@ export const SearchBar = () => {
     const kw = event.currentTarget.value;
     if (data) {
       const re = new RegExp(`.*${kw}.*`, 'i');
-      alert(session.sub);
       const listUserFilter = data.searchUser.filter(
         (user: any) => re.test(user.name) && user.id !== session.sub,
       );

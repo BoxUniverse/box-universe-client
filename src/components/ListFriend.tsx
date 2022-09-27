@@ -3,7 +3,6 @@ import Friend from '@components/Friend';
 import { IoSearchOutline } from 'react-icons/io5';
 
 const ListFriend = () => {
-  const x = 5;
   return (
     <div className="fixed bottom-1 z-30 ml-24 h-5/6 px-3 backdrop-blur-md  rounded-xl">
       <div className="mt-1 ml-2">
