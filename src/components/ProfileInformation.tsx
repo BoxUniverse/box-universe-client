@@ -1,16 +1,21 @@
 import { Avatar, Badge, Tooltip } from '@mui/material';
-
-import avatar from '@images/logo.png';
-import React from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   IoCallOutline,
   IoCopyOutline,
+  IoImagesOutline,
   IoMailOutline,
   IoPersonAdd,
   IoPersonOutline,
 } from 'react-icons/io5';
 import Input from '@components/Input';
 import useToast from '@hooks/useToast';
+import { useMutation } from '@apollo/client';
+import uploadAvatar from '@mutations/uploadAvatar.graphql';
+import { useSession } from 'next-auth/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, StoreDispatch } from '@stores/app';
+import { update } from '@features/user/userSlice';
 
 type Props = {
   data: any;
@@ -19,25 +24,95 @@ type Props = {
 
 const ProfileInformation = ({ data, me }: Props) => {
   const toast = useToast();
+  const inputFileRef = useRef<HTMLInputElement>();
+  const [upload, { data: _file, error, loading }] = useMutation(uploadAvatar);
+  const [isUpdate, setUpdate] = useState<boolean>(false);
+  console.log(data);
+
+  const user = useSelector<RootState>((state) => state.userSlice.user) as any;
+
+  const [avatar, setAvatar] = useState<string>(user.avatar);
+  // alert(avatar);
+
+  const dispatch = useDispatch<StoreDispatch>();
+  const { data: session } = useSession();
+
+  const handleAddFriend = () => {
+    alert('x');
+  };
+
+  useEffect(() => {
+    if (loading) {
+      dispatch(
+        update({
+          ...data,
+          avatar: avatar,
+        }),
+      );
+    }
+  }, [avatar]);
+
+  const handleChangeAvatar = () => {
+    inputFileRef.current.click();
+  };
+
+  const handleChangeInputFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files[0];
+    const id = session.sub;
+    const reader = new FileReader();
+
+    upload({
+      variables: {
+        file,
+        id,
+      },
+      errorPolicy: 'all',
+    });
+
+    reader.onload = (event) => {
+      console.log(event.target.result);
+      setAvatar(() => event.target.result.toString());
+    };
+    reader.readAsDataURL(file);
+  };
   return (
     <div className="flex justify-center flex-col items-center">
+      <input
+        type="file"
+        name="avatar"
+        id="avatar"
+        className="hidden"
+        ref={inputFileRef}
+        accept=".png,.jpg,.jpeg"
+        onChange={handleChangeInputFile}
+      />
       <Badge
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         badgeContent={
-          !me && (
-            <IoPersonAdd
-              size={20}
-              className="text-lg w-9 p-2.5 h-9 rounded-full bg-purple-500 cursor-pointer"
-            />
-          )
+          <Tooltip title={!me ? 'Add friend' : 'Change Avatar'}>
+            <div
+              className="w-10 p-2.5 h-10 rounded-full bg-purple-500 border-2 flex items-center justify-center"
+              onClick={!me ? handleAddFriend : handleChangeAvatar}>
+              {!me ? (
+                <IoPersonAdd size={20} className="text-lg w-full h-full cursor-pointer" />
+              ) : (
+                <IoImagesOutline className="text-lg w-full h-full cursor-pointer" size={20} />
+              )}
+            </div>
+          </Tooltip>
         }>
-        <Avatar alt="Travis Howard" src={avatar.src} sx={{ width: 80, height: 80 }} />
+        <Avatar
+          alt="Travis Howard"
+          className="border-2"
+          src={!me ? data.avatar : avatar}
+          sx={{ width: 100, height: 100 }}
+        />
       </Badge>
 
       <div className="flex flex-row justify-center items-center mt-5 ">
         <span className="text-xl text-purple-500 font-bold mr-2 select-none">
-          {data.name.toUpperCase()}
+          {data?.name?.toUpperCase()}
         </span>
         <Tooltip title="Copy name">
           <IoCopyOutline

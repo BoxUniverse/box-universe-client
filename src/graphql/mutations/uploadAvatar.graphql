@@ -1,0 +1,7 @@
+mutation uploadAvatar($file: Upload!, $id: String!) {
+  uploadAvatar(file: $file, id: $id) {
+    filename
+    mimetype
+    url
+  }
+}

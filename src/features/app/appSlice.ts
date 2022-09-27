@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type AppState = {
   page?: string;
-  user?: any;
 };
 const initialState = {
   page: 'home',
 } as AppState;
+
 const appSlice = createSlice({
   name: 'app',
   initialState,
