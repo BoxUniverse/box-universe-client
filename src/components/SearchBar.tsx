@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import searchUser from '@queries/searchUser.graphql';
+import getEntireProfile from '@queries/getEntireProfile.graphql';
 import { useLazyQuery } from '@apollo/client';
 import DropdownSearchBar from './DropdownSearchBar';
 import { IoSearchOutline } from 'react-icons/io5';
@@ -12,18 +12,12 @@ export const SearchBar = () => {
   const dropdownRef = React.createRef<HTMLDivElement>();
   const { data: session } = useSession();
 
-  const [findUser, { data }] = useLazyQuery(searchUser);
+  const [getAll, { data }] = useLazyQuery(getEntireProfile);
 
   const [listUser, setListUser] = useState<Array<any>>([]);
 
   useEffect(() => {
-    findUser({
-      variables: {
-        searchInput: {
-          keyword: '',
-        },
-      },
-    });
+    getAll();
   }, []);
 
   const handleInputSearch = (event: FormEvent<HTMLInputElement>) => {
@@ -31,7 +25,9 @@ export const SearchBar = () => {
     const kw = event.currentTarget.value;
     if (data) {
       const re = new RegExp(`.*${kw}.*`, 'i');
-      const listUserFilter = data.searchUser.filter(
+
+      console.log(data);
+      const listUserFilter = data?.getEntireProfile?.filter(
         (user: any) => re.test(user.name) && user.id !== session.sub,
       );
       setListUser(listUserFilter);
