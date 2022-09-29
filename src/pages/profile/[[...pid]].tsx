@@ -7,9 +7,8 @@ import client from '@src/ApolloClient';
 import { GetServerSideProps } from 'next';
 import _getProfile from '@queries/getProfile.graphql';
 import { getSession } from 'next-auth/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, StoreDispatch } from '@stores/app';
-import { update } from '@features/user/userSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '@stores/app';
 
 type NextPageProps = {
   data: any;
