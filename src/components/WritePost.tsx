@@ -1,9 +1,11 @@
-import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState, MouseEvent } from 'react';
 import { IoHappyOutline, IoImageOutline, IoVideocamOutline } from 'react-icons/io5';
 import 'emoji-mart-next/css/emoji-mart.css';
 
 // @ts-nocheck
 import { Picker } from 'emoji-mart-next';
+import { useMutation } from '@apollo/client';
+import POST from '@mutations/post.graphql';
 
 const WritePost = () => {
   const [showIcon, setShowIcon] = useState<boolean>(false);
@@ -11,6 +13,15 @@ const WritePost = () => {
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const iconEmojiRef = useRef<HTMLDivElement>(null);
   const refTextArea = useRef<HTMLTextAreaElement>(null);
+  const [post, { data, error }] = useMutation(POST);
+
+  const handlePost = (e: MouseEvent<HTMLDivElement>) => {
+    post({
+      variables: {
+        content,
+      },
+    });
+  };
 
   const handleInputContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -78,9 +89,11 @@ const WritePost = () => {
           <IoHappyOutline size={30} className="text-purple-500" />
         </div>
       </div>
-      <div className="mt-3 flex justify-center items-center bg-purple-500 w-full h-10 rounded-md cursor-pointer">
+      <div
+        className="mt-3 flex justify-center items-center bg-purple-500 w-full h-10 rounded-md cursor-pointer"
+        onClick={handlePost}>
         <input type="file" id="image" name="image" />
-        <span>POST</span>
+        <button type="button">POST</button>
       </div>
     </div>
   );

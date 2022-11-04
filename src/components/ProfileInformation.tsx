@@ -10,12 +10,14 @@ import {
 } from 'react-icons/io5';
 import Input from '@components/Input';
 import useToast from '@hooks/useToast';
-import { useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import uploadAvatar from '@mutations/uploadAvatar.graphql';
 import { useSession } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, StoreDispatch } from '@stores/app';
 import { update } from '@features/user/userSlice';
+
+import queryMe from '@queries/me.graphql';
 
 type Props = {
   data: any;
@@ -27,7 +29,6 @@ const ProfileInformation = ({ data, me }: Props) => {
   const inputFileRef = useRef<HTMLInputElement>();
   const [upload, { data: _file, error, loading }] = useMutation(uploadAvatar);
   const [isUpdate, setUpdate] = useState<boolean>(false);
-  console.log(data);
 
   const user = useSelector<RootState>((state) => state.userSlice.user) as any;
 
@@ -58,7 +59,7 @@ const ProfileInformation = ({ data, me }: Props) => {
 
   const handleChangeInputFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
-    const id = session.sub;
+    const id = session.user._id;
     const reader = new FileReader();
 
     upload({

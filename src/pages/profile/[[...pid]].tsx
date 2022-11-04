@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import MainLayout from '@layouts/MainLayout';
 import { NextPageWithLayout } from '@pages/_app';
 import Head from 'next/head';
@@ -6,9 +6,10 @@ import ProfileInformation from '@components/ProfileInformation';
 import client from '@src/ApolloClient';
 import { GetServerSideProps } from 'next';
 import _getProfile from '@queries/getProfile.graphql';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@stores/app';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 type NextPageProps = {
   data: any;
@@ -34,11 +35,12 @@ Profile.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { params } = context;
   const session = await getSession(context);
-  const pid = params.pid?.[0] || session.sub;
+
+  const pid = params.pid?.[0] || session.user._id;
 
   let me = false;
 
-  if (!params.pid?.[0] || pid === session.sub) {
+  if (!params.pid?.[0] || pid === session.user._id) {
     me = true;
 
     return {

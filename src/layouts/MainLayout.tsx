@@ -35,7 +35,7 @@ const MainLayout = (props: Props) => {
           className="fixed top-0 left-0 min-w-full min-h-full"
           src={bg.src}
           alt=""
-          layout="fill"
+          fill
         />
         <div className="wrapLayout flex h-full w-full">
           <Topbar page={page} />

@@ -28,7 +28,7 @@ export const SearchBar = () => {
 
       console.log(data);
       const listUserFilter = data?.getEntireProfile?.filter(
-        (user: any) => re.test(user.name) && user.id !== session.sub,
+        (user: any) => re.test(user.name) && user.id !== session.user._id,
       );
       setListUser(listUserFilter);
     }
