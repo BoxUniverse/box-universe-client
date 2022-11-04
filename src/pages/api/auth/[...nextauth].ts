@@ -8,7 +8,6 @@ import * as crypto from 'crypto';
 import client from '@src/ApolloClient';
 import OAuth from '@mutations/OAuth.graphql';
 import DiscordProvider from '@providers/DiscordProvider';
-
 export const cookiesOptions: CookieSerializeOptions = {
   sameSite: 'lax',
   secure: true,
@@ -17,6 +16,7 @@ export const cookiesOptions: CookieSerializeOptions = {
 };
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.SECRET,
   providers: [
     CredentialsProvider,
     FacebookProvider,
@@ -27,10 +27,6 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60 * 24 * 14,
-  },
-  jwt: {
-    maxAge: 60 * 60 * 24 * 14,
-    secret: process.env.SECRET,
   },
   pages: {
     signIn: '/auth/login',
@@ -55,6 +51,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account }) {
+      // login with provider oauth
       if (account.provider !== 'credentials') {
         const data = `${user.id}.${account.provider}.${process.env.SECRET}`;
         const hash = crypto.createHash('md5').update(data).digest('hex');
@@ -80,19 +77,19 @@ export const authOptions: NextAuthOptions = {
       return !!user;
     },
     async session({ session, token, user }) {
-      session.username = token.username;
-      session.email = token.email;
-      session._id = token._id;
-      session.user!.name = token.username as string;
-      session.user!.name = token.name as string;
-      session.user!.email = token.email as string;
-      return { ...session, ...token, ...user };
+      session.user.username = token.username as string;
+      session.user.email = token.email;
+      session.user._id = token._id as string;
+      if (token._id) session.user._id = token._id as string;
+      else session.user._id = token.sub;
+      return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user?.username) {
         token.username = user.username;
         token.name = user.name;
         token.email = user.email;
+        token._id = user._id;
       }
 
       return token;

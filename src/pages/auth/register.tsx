@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, ReactElement, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -44,25 +44,28 @@ const Register: NextPageWithLayout = () => {
     errorPolicy: 'all',
   });
 
-  if (error) {
-    toast.error(error.message, {
-      position: 'top-right',
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'dark',
-      icon: <IoWarningOutline size={20} className="text-purple-500" />,
-      bodyClassName: 'bg-transparent',
-      className: 'bg-transparent backdrop-blur-sm border-purple-500',
-      pauseOnFocusLoss: false,
-    });
-  }
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message, {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        icon: <IoWarningOutline size={20} className="text-purple-500" />,
+        bodyClassName: 'bg-transparent',
+        className: 'bg-transparent backdrop-blur-sm border-purple-500',
+        pauseOnFocusLoss: false,
+      });
+    }
+  }, [error]);
+  useEffect(() => {
   if (data) {
     toast.success(
-      'Sign up successfull, you will be automation redirected to login after 2 seconds !',
+      'Sign up successful, you will be automation redirected to login after 3 seconds !',
       {
         position: 'top-right',
         autoClose: 2000,
@@ -82,6 +85,7 @@ const Register: NextPageWithLayout = () => {
       },
     );
   }
+  }, [data])
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const { username, password, email } = data;
     registerMutation({

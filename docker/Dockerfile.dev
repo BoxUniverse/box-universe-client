@@ -1,6 +1,7 @@
-FROM node:lts
+FROM node:16.13
 WORKDIR /client
 COPY ./client/package.json .
+RUN yarn config set "strict-ssl" false -g
 RUN yarn install
 COPY ./client .
 EXPOSE 5000

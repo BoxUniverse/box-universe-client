@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:16.13
 WORKDIR /client
 COPY ./client/package.json .
 RUN yarn install --production
