@@ -2,8 +2,11 @@ import React from 'react';
 import FriendChat from '@components/FriendChat';
 
 import { IoSearchOutline } from 'react-icons/io5';
+import { useSelector } from 'react-redux';
+import { RootState } from '@stores/app';
 
 const ListFriendChat = () => {
+  const user = useSelector<RootState>((state) => state.userSlice.user) as any;
   return (
     <div className="fixed bottom-1 z-50 ml-24 h-5/6 px-3 overflow-x-hidden overflow-scroll backdrop-blur-md  rounded-xl">
       <div className="mt-1 ml-2">
@@ -27,43 +30,8 @@ const ListFriendChat = () => {
         />
       </div>
       <div className="list-friends ">
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
-        <FriendChat />
+        {user?.friends &&
+          user.friends.map((friend) => <FriendChat key={friend.id} info={friend} />)}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import FacebookProvider from '@providers/FacebookProvider';
 import GoogleProvider from '@providers/GoogleProvider';
 import GithubProvider from '@providers/GithubProvider';
 import * as crypto from 'crypto';
-import client from '@src/ApolloClient';
+import { client } from '@source/ApolloClient';
 import OAuth from '@mutations/OAuth.graphql';
 import DiscordProvider from '@providers/DiscordProvider';
 export const cookiesOptions: CookieSerializeOptions = {
@@ -74,6 +74,7 @@ export const authOptions: NextAuthOptions = {
           return false;
         }
       }
+
       return !!user;
     },
     async session({ session, token, user }) {
@@ -82,7 +83,7 @@ export const authOptions: NextAuthOptions = {
       session.user._id = token._id as string;
       if (token._id) session.user._id = token._id as string;
       else session.user._id = token.sub;
-      return session;
+      return { ...session };
     },
     async jwt({ token, user, account }) {
       if (user?.username) {
@@ -92,7 +93,7 @@ export const authOptions: NextAuthOptions = {
         token._id = user._id;
       }
 
-      return token;
+      return { ...token };
     },
   },
 };

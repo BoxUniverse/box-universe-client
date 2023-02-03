@@ -41,7 +41,7 @@ const Register: NextPageWithLayout = () => {
   const router = useRouter();
 
   const [registerMutation, { data, error }] = useMutation(_register, {
-    errorPolicy: 'all',
+    // errorPolicy: 'all',
   });
 
   useEffect(() => {
@@ -63,29 +63,29 @@ const Register: NextPageWithLayout = () => {
     }
   }, [error]);
   useEffect(() => {
-  if (data) {
-    toast.success(
-      'Sign up successful, you will be automation redirected to login after 3 seconds !',
-      {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-        icon: <IoWarningOutline size={20} className="text-purple-500" />,
-        bodyClassName: 'bg-transparent',
-        className: 'bg-transparent backdrop-blur-sm border-purple-500',
-        pauseOnFocusLoss: false,
-        onClose: () => {
-          router.push('/auth/login');
+    if (data) {
+      toast.success(
+        'Sign up successful, you will be automation redirected to login after 3 seconds !',
+        {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          icon: <IoWarningOutline size={20} className="text-purple-500" />,
+          bodyClassName: 'bg-transparent',
+          className: 'bg-transparent backdrop-blur-sm border-purple-500',
+          pauseOnFocusLoss: false,
+          onClose: () => {
+            router.push('/auth/login');
+          },
         },
-      },
-    );
-  }
-  }, [data])
+      );
+    }
+  }, [data]);
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const { username, password, email } = data;
     registerMutation({

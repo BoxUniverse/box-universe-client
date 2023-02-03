@@ -2,13 +2,7 @@ import React, { ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;
-  href?: string;
-  onClick?: any;
 };
-const ItemSidebar = ({ href, children, onClick }: Props, ref: any) => (
-  <a href={href} ref={ref} onClick={onClick}>
-    {children}
-  </a>
-);
+const ItemSidebar = ({ children }: Props, ref: any) => <div ref={ref}>{children}</div>;
 
 export default React.forwardRef(ItemSidebar);

@@ -32,11 +32,11 @@ const DropdownSearchBar = (
 
   return (
     <div
-      className="absolute top-14 backdrop-blur-sm search-blur rounded-lg w-full h-auto  pl-3 pr-5 pt-1"
+      className="absolute top-16 right-0 backdrop-blur-sm search-blur rounded-lg w-96 h-auto  pl-3 pr-5 pt-1"
       ref={ref}>
       <div className="h-full w-ful">
         {data?.map((user) => (
-          <ItemDropdownSearchBar key={user.id} name={user.name} id={user.id} />
+          <ItemDropdownSearchBar key={user.id} name={user.name} id={user.id} avatar={user.avatar} />
         ))}
       </div>
     </div>

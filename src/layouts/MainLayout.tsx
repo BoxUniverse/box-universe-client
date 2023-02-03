@@ -11,7 +11,12 @@ import ListFriendChat from '@components/ListFriendChat';
 import Image from 'next/image';
 import Sidebar from '@components/Sidebar';
 import { BaseLayout } from '@layouts/BaseLayout';
+import { useSession } from 'next-auth/react';
+import { useLazyQuery } from '@apollo/client';
 
+import _getProfile from '@queries/getProfile.graphql';
+import { update } from '@source/features/user/userSlice';
+import useSubscribe from '@hooks/useSubscribe';
 type Props = {
   children: ReactNode;
 };
@@ -19,6 +24,8 @@ const MainLayout = (props: Props) => {
   const router = useRouter();
   const page = useSelector<RootState>((state) => state.appSlice.page) as string;
   const dispatch = useDispatch<StoreDispatch>();
+
+  const user = useSelector<RootState>((state) => state.userSlice.user) as any;
   const { children } = props;
 
   useEffect(() => {
@@ -26,6 +33,35 @@ const MainLayout = (props: Props) => {
     if (name === '') dispatch(changePage('home'));
     else dispatch(changePage(name));
   });
+  useSubscribe('publish/profiles.unfriend', (payload) => {
+    const updatedFriend = user.friends.filter((friend) => friend.id !== payload.friendId);
+    dispatch(
+      update({
+        ...user,
+        friends: [...updatedFriend],
+      }),
+    );
+  });
+
+  const { data: session, status } = useSession();
+
+  const [getProfile, { data, error }] = useLazyQuery(_getProfile);
+
+  useEffect(() => {
+    if (session?.user) {
+      getProfile({
+        variables: {
+          profileInput: {
+            id: session.user._id,
+          },
+        },
+      });
+    }
+  }, [session, getProfile]);
+
+  useEffect(() => {
+    if (data) dispatch(update(data.getProfile));
+  }, [data]);
 
   return (
     <>

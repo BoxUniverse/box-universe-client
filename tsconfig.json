@@ -27,10 +27,12 @@
       "@providers/*": ["./src/providers/*"],
       "@mutations/*": ["./src/graphql/mutations/*"],
       "@hooks/*": ["./src/hooks/*"],
+      "@hooks": ["./src/hooks/index"],
       "@queries/*": ["./src/graphql/queries/*"],
       "@contexts/*": ["./src/contexts/*"],
       "@middlewares/*": ["./src/middlewares/*"],
-      "@src/*": ["./src/*"],
+      "@handlers/*": ["./src/handlers/*"],
+      "@source/*": ["./src/*"],
       "@features/*": ["./src/features/*"]
     }
   },

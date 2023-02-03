@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IoChatboxOutline,
   IoExitOutline,
@@ -9,6 +9,7 @@ import {
 import Link from 'next/link';
 import ItemSidebar from '@components/ItemSidebar';
 import { signOut } from 'next-auth/react';
+import { usePublish } from '@hooks';
 
 type Props = {
   page: string;
@@ -16,8 +17,14 @@ type Props = {
 
 const Sidebar = (props: Props) => {
   const { page } = props;
+  const publish = usePublish();
+
+  const logout = () => {
+    publish('logout', null);
+    signOut({ callbackUrl: '/auth/login', redirect: true });
+  };
   return (
-    <div className="flex justify-center items-center h-5/6 fixed bottom-1 left-2 z-50">
+    <div className="flex justify-center items-center h-5/6 fixed bottom-1 left-2 z-50 w-20">
       <div className="w-20 h-full flex flex-col justify-between sidebar sidebar-blur backdrop-blur-lg rounded-xl">
         <div>
           <div
@@ -75,7 +82,10 @@ const Sidebar = (props: Props) => {
             <div className="dot rounded-full w-1 h-1  bg-green-500 absolute right-2 top-1/2" />
           </div>
           <div className="item flex justify-center relative items-center ">
-            <button onClick={() => signOut({ callbackUrl: '/auth/login' })}>
+            <button
+              onClick={() => {
+                logout();
+              }}>
               <div className="rounded-full p-3 glass-blur cursor-pointer icon-item">
                 <ItemSidebar>
                   <IoExitOutline size={20} className="text-white" />

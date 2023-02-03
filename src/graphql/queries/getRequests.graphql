@@ -1,0 +1,20 @@
+query getRequests($request: RetrieveRequest!) {
+  getRequests(request: $request) {
+    _id
+    userReceive {
+      id
+      email
+      avatar
+      name
+    }
+    userRequest {
+      id
+      email
+      avatar
+      name
+    }
+    isAccept
+    isReject
+    isPending
+  }
+}

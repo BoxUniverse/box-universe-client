@@ -1,6 +1,14 @@
 import { Avatar, Badge, Tooltip } from '@mui/material';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  MouseEvent,
+  MouseEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
+  IoBanSharp,
   IoCallOutline,
   IoCopyOutline,
   IoImagesOutline,
@@ -9,15 +17,14 @@ import {
   IoPersonOutline,
 } from 'react-icons/io5';
 import Input from '@components/Input';
-import useToast from '@hooks/useToast';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useToast, usePublish } from '@hooks';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import uploadAvatar from '@mutations/uploadAvatar.graphql';
 import { useSession } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, StoreDispatch } from '@stores/app';
 import { update } from '@features/user/userSlice';
-
-import queryMe from '@queries/me.graphql';
+import UNFRIEND from '@mutations/unfriend.graphql';
 
 type Props = {
   data: any;
@@ -27,19 +34,32 @@ type Props = {
 const ProfileInformation = ({ data, me }: Props) => {
   const toast = useToast();
   const inputFileRef = useRef<HTMLInputElement>();
-  const [upload, { data: _file, error, loading }] = useMutation(uploadAvatar);
+  const [upload, { data: _file, loading }] = useMutation(uploadAvatar);
+  const [isFriend, setFriend] = useState(false);
+
   const [isUpdate, setUpdate] = useState<boolean>(false);
 
   const user = useSelector<RootState>((state) => state.userSlice.user) as any;
 
+  useEffect(() => {
+    const { friends } = user;
+    const status = friends?.some((friend) => friend.id === data.id);
+    setFriend(status);
+  }, [user, data]);
+
   const [avatar, setAvatar] = useState<string>(user.avatar);
-  // alert(avatar);
+  const [unfriend, { data: resultUnfriend, error }] = useMutation(UNFRIEND);
 
   const dispatch = useDispatch<StoreDispatch>();
   const { data: session } = useSession();
 
-  const handleAddFriend = () => {
-    alert('x');
+  const publish = usePublish();
+
+  const requestAddFriend = () => {
+    publish('subscribe/requests.SEND_REQUEST', {
+      friendId: data.id,
+      userId: session?.user?._id,
+    });
   };
 
   useEffect(() => {
@@ -56,22 +76,52 @@ const ProfileInformation = ({ data, me }: Props) => {
   const handleChangeAvatar = () => {
     inputFileRef.current.click();
   };
+  useEffect(() => {
+    if (resultUnfriend) {
+      setFriend(false);
+
+      const updatedFriends = user.friends.filter((friend) => friend.id !== data.id);
+      dispatch(
+        update({
+          ...user,
+          friends: [...updatedFriends],
+        }),
+      );
+      toast('success', `You was unfriend ${data.name} !!`);
+      publish('subscribe/profiles.unfriend', {
+        friendId: data.id,
+        userId: session?.user?._id,
+      });
+    }
+  }, [resultUnfriend]);
+  const handleBlock = (event: MouseEvent<HTMLDivElement>) => {
+    unfriend({
+      variables: {
+        friend: {
+          userId: session?.user?._id,
+          friendId: data.id,
+        },
+      },
+    });
+  };
 
   const handleChangeInputFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
+
     const id = session.user._id;
     const reader = new FileReader();
 
     upload({
       variables: {
-        file,
+        file: file,
         id,
       },
-      errorPolicy: 'all',
+      // errorPolicy: 'all',copy
     });
 
+    console.log(file);
+
     reader.onload = (event) => {
-      console.log(event.target.result);
       setAvatar(() => event.target.result.toString());
     };
     reader.readAsDataURL(file);
@@ -91,17 +141,27 @@ const ProfileInformation = ({ data, me }: Props) => {
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         badgeContent={
-          <Tooltip title={!me ? 'Add friend' : 'Change Avatar'}>
-            <div
-              className="w-10 p-2.5 h-10 rounded-full bg-purple-500 border-2 flex items-center justify-center"
-              onClick={!me ? handleAddFriend : handleChangeAvatar}>
-              {!me ? (
-                <IoPersonAdd size={20} className="text-lg w-full h-full cursor-pointer" />
-              ) : (
-                <IoImagesOutline className="text-lg w-full h-full cursor-pointer" size={20} />
-              )}
-            </div>
-          </Tooltip>
+          <>
+            <Tooltip title={!me ? (isFriend ? 'Block' : 'Add Friend') : 'Change Avatar'}>
+              <div
+                className="w-10 p-2.5 h-10 rounded-full bg-purple-500 border-2 flex items-center justify-center"
+                onClick={!me ? (isFriend ? handleBlock : requestAddFriend) : handleChangeAvatar}>
+                {!me ? (
+                  <>
+                    {!isFriend ? (
+                      <IoPersonAdd size={20} className="text-lg w-full h-full cursor-pointer" />
+                    ) : (
+                      <IoBanSharp size={20} className="text-lg w-full h-full cursor-pointer" />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <IoImagesOutline className="text-lg w-full h-full cursor-pointer" size={20} />
+                  </>
+                )}
+              </div>
+            </Tooltip>
+          </>
         }>
         <Avatar
           alt="Travis Howard"
@@ -116,14 +176,16 @@ const ProfileInformation = ({ data, me }: Props) => {
           {data?.name?.toUpperCase()}
         </span>
         <Tooltip title="Copy name">
-          <IoCopyOutline
-            size={20}
-            className="cursor-pointer"
-            onClick={() => {
-              navigator.clipboard.writeText(data.name.toUpperCase());
-              toast('success', 'Copy successfull');
-            }}
-          />
+          <>
+            <IoCopyOutline
+              size={20}
+              className="cursor-pointer"
+              onClick={() => {
+                navigator.clipboard.writeText(data.name.toUpperCase());
+                toast('success', 'Copy successfull');
+              }}
+            />
+          </>
         </Tooltip>
       </div>
 

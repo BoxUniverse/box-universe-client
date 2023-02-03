@@ -5,5 +5,11 @@ query getProfile($profileInput: Obtain!) {
     email
     provider
     avatar
+    friends {
+      avatar
+      id
+      name
+      email
+    }
   }
 }

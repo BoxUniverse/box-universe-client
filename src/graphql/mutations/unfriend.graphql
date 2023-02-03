@@ -1,0 +1,3 @@
+mutation unfriend($friend: Friend!) {
+  unfriend(friend: $friend)
+}
