@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true,
+      "dynamicImport": false,
+      "decorators": false
+    },
+    "transform": {
+      "react": { "runtime": "automatic", "pragmaFrag": "React.Fragment", "refresh": true }
+    },
+    "target": "es2016",
+    "loose": true,
+    "externalHelpers": true,
+    "preserveAllComments": false
+  },
+  "minify": false,
+  "sourceMaps": true,
+  "inlineSourcesContent": true
+}

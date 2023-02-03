@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -24,6 +24,8 @@ import FacebookLogo from '@images/facebook.svg';
 import GoogleLogo from '@images/google.png';
 import DiscordLogo from '@images/discord.png';
 import GithubLogo from '@images/github.png';
+import { SocketContext, useSocket } from '@contexts/SocketContext';
+import { getCookie } from 'cookies-next';
 
 type Inputs = { username: string; password: string };
 const Login: NextPageWithLayout = () => {
@@ -37,18 +39,32 @@ const Login: NextPageWithLayout = () => {
   });
 
   const [disable, setDisable] = useState<boolean>(false);
+  const { socket } = useSocket();
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await signIn('credentials', { username, password, redirect: false });
-
+      const response = await signIn('credentials', {
+        username,
+        password,
+        redirect: true,
+        callbackUrl: '/',
+      });
       const error = response?.error;
+
+      // if (user) {
+      //   console.log(user, 'sdsd');
+      //
+      //   socket.emit('login', 'Sdsdsd');
+      // }
 
       if (error) return Promise.reject(new Error('Unauthorizied'));
     } catch (error) {
       return Promise.reject(new Error('Unauthorized'));
     }
   };
+  useEffect(() => {
+    localStorage.setItem('persist:root', '');
+  }, []);
 
   const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
     if (!disable) {

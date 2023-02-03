@@ -13,4 +13,4 @@ export default withAuth(function middleware() {}, {
   },
 });
 
-export const config = { matcher: ['/chat', '/notifications', '/', '/settings'] };
+export const config = { matcher: ['/chat', '/notifications', '/', '/settings', '/profile/:path*'] };

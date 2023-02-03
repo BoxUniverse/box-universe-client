@@ -1,5 +1,5 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
-import client from '../ApolloClient';
+import { client } from '../ApolloClient';
 import login from '@mutations/login.graphql';
 import * as crypto from 'crypto';
 
@@ -30,14 +30,7 @@ export default CredentialsProvider({
 
       const { username: _username, email, _id } = data.login;
 
-      const response = {
-        username: _username,
-        email,
-        _id,
-        id: _id,
-      };
-
-      return response;
+      return data.login;
     } catch (error) {
       console.log(error);
 

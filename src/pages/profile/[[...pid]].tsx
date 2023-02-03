@@ -3,13 +3,14 @@ import MainLayout from '@layouts/MainLayout';
 import { NextPageWithLayout } from '@pages/_app';
 import Head from 'next/head';
 import ProfileInformation from '@components/ProfileInformation';
-import client from '@src/ApolloClient';
+import { client } from '@source/ApolloClient';
 import { GetServerSideProps } from 'next';
 import _getProfile from '@queries/getProfile.graphql';
-import { getSession, useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@stores/app';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { ApolloProvider, useApolloClient } from '@apollo/client';
+import attachToken from '@source/injection/attachToken';
 
 type NextPageProps = {
   data: any;
@@ -24,7 +25,7 @@ const Profile: NextPageWithLayout = ({ data, me }: NextPageProps) => {
       <Head>
         <title>Profile</title>
       </Head>
-      <ProfileInformation data={data ? data.getProfile : user} me={me} />
+      <ProfileInformation data={data ? data : user} me={me} />
     </div>
   );
 };
@@ -32,7 +33,7 @@ Profile.getLayout = function getLayout(page: ReactElement) {
   return <MainLayout>{page}</MainLayout>;
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = attachToken(async (context) => {
   const { params } = context;
   const session = await getSession(context);
 
@@ -58,14 +59,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         id: pid,
       },
     },
-    errorPolicy: 'all',
   })) as any;
   return {
     props: {
-      data,
+      data: data?.getProfile || null,
       me,
     },
   };
-};
+});
 
 export default Profile;

@@ -1,0 +1,16 @@
+mutation acceptRequest($request: InfoRequest!) {
+  acceptRequest(request: $request) {
+    isAccept
+    isPending
+    userRequest {
+      id
+      name
+      avatar
+    }
+    userReceive {
+      id
+      name
+      avatar
+    }
+  }
+}
