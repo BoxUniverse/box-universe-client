@@ -1,0 +1,9 @@
+query getListFriendNotInConversation($conversationId: String!) {
+  getListFriendNotInConversation(conversationId: $conversationId) {
+    result {
+      id
+      name
+      avatar
+    }
+  }
+}

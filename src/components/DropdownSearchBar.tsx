@@ -1,6 +1,6 @@
-import { forwardRef, SetStateAction, useEffect } from 'react';
+import { ItemDropdownSearchBar } from '@components';
 import _ from 'lodash';
-import ItemDropdownSearchBar from './ItemDropdownSearchBar';
+import { forwardRef, SetStateAction, useEffect } from 'react';
 
 const DropdownSearchBar = (
   props: {
@@ -32,7 +32,7 @@ const DropdownSearchBar = (
 
   return (
     <div
-      className="absolute top-16 right-0 backdrop-blur-sm search-blur rounded-lg w-96 h-auto  pl-3 pr-5 pt-1"
+      className="absolute top-16 right-0 backdrop-blur-sm search-blur rounded-lg w-96 h-auto  pl-3 pr-5 pt-1 z-50"
       ref={ref}>
       <div className="h-full w-ful">
         {data?.map((user) => (

@@ -1,4 +1,4 @@
-import { useSocket } from '@contexts/SocketContext';
+import { useSocket } from '@contexts';
 
 // WARNING: subscribe multiple event
 const usePublish = (): ((...args: any) => any) => {
@@ -8,5 +8,5 @@ const usePublish = (): ((...args: any) => any) => {
     socket.emit(eventName, payload);
   };
 };
+export default usePublish
 
-export default usePublish;

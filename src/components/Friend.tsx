@@ -1,16 +1,34 @@
-import React from 'react';
+import { useQuery } from '@apollo/client';
 import { Avatar, Badge } from '@mui/material';
-import avatar from '@images/logo.png';
-import { IoBanOutline, IoChatbubbleEllipsesOutline } from 'react-icons/io5';
+import { GET_CONVERSATION_BY_FRIEND } from '@queries';
+import { changeConversation } from '@src/features/user/conversationSlice';
+import { RootState, StoreDispatch } from '@stores/app';
 import { useRouter } from 'next/router';
+import { IoBanOutline, IoChatbubbleEllipsesOutline } from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = {
   info: any;
 };
 const Friend = ({ info }: Props) => {
   const router = useRouter();
+
+  const user = useSelector<RootState>((state) => state.userSlice.user) as any;
+  const { data } = useQuery(GET_CONVERSATION_BY_FRIEND, {
+    variables: {
+      friendId: info.id,
+      profileId: user.id,
+    },
+  });
+
   const seeProfile = () => {
-    router.push(`/profile/${info.id}`);
+    void router.push(`/profile/${info.id}`);
+  };
+  const dispatch = useDispatch<StoreDispatch>();
+
+  const chatWith = () => {
+    dispatch(changeConversation(data.getConversationByFriend._id));
+    void router.push('/chat');
   };
 
   return (
@@ -25,9 +43,9 @@ const Friend = ({ info }: Props) => {
       <div
         className="text-white ml-5 w-32 whitespace-nowrap overflow-hidden cursor-pointer "
         onClick={seeProfile}>
-        {info.name.length > 10 ? `${info.name.slice(0, 10)} .............` : info.name}
+        {info?.name?.length > 10 ? `${info.name.slice(0, 10)} .............` : info?.name}
       </div>
-      <div className="relative">
+      <div className="relative" onClick={chatWith}>
         <IoChatbubbleEllipsesOutline size={25} className="text-purple-500 ml-10 cursor-pointer" />
         <IoChatbubbleEllipsesOutline
           size={25}

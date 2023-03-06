@@ -1,0 +1,23 @@
+query getProfile($profileInput: Obtain!) {
+  getProfile(profileInput: $profileInput) {
+    id
+    name
+    email
+    avatar
+    provider
+    friends {
+      __typename
+      ... on Profile {
+        __typename
+        avatar
+        id
+        name
+        email
+      }
+      ... on FriendProfile {
+        __typename
+        friendId
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+query getMessagesByConversationId($payload: PaginationMessages!) {
+  getMessagesByConversationId(payload: $payload) {
+    messages {
+      _id
+      files {
+        url
+        type
+      }
+      type
+      sender {
+        id
+        avatar
+        name
+      }
+      message
+      _id
+      createdAt
+    }
+  }
+}

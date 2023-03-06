@@ -1,0 +1,5 @@
+subscription newLike($post: String!) {
+  newLike(post: $post) {
+    countLike
+  }
+}

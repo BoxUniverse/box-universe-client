@@ -8,6 +8,7 @@
   "root": true,
   "rules": {
     "no-console": 2,
-    "eqeqeq": 2
+    "eqeqeq": 2,
+    "react-hooks/exhaustive-deps": 0
   }
 }

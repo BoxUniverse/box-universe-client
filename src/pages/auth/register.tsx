@@ -1,7 +1,15 @@
-import React, { useState, ReactElement, useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
+import { yupResolver } from '@hookform/resolvers/yup';
+import AuthLayout from '@layouts/AuthLayout';
+import { Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
+import { REGISTER } from '@src/graphql';
+import '@styles/AuthLayout.module.scss';
+import RegisterSchema from '@validations/RegisterSchema';
+import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { ReactElement, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   IoArrowForwardOutline,
   IoCheckmarkDoneOutline,
@@ -12,16 +20,8 @@ import {
   IoPersonOutline,
   IoWarningOutline,
 } from 'react-icons/io5';
-import { Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
-import '@styles/AuthLayout.module.scss';
-import { yupResolver } from '@hookform/resolvers/yup';
-import RegisterSchema from '@validations/RegisterSchema';
-import AuthLayout from '@layouts/AuthLayout';
-import { NextPageWithLayout } from '../_app';
-import { useMutation } from '@apollo/client';
-import _register from '@mutations/register.graphql';
-import Head from 'next/head';
 import { toast } from 'react-toastify';
+import { NextPageWithLayout } from '../_app';
 
 type Inputs = {
   username: string;
@@ -40,7 +40,7 @@ const Register: NextPageWithLayout = () => {
   });
   const router = useRouter();
 
-  const [registerMutation, { data, error }] = useMutation(_register, {
+  const [registerMutation, { data, error }] = useMutation(REGISTER, {
     // errorPolicy: 'all',
   });
 

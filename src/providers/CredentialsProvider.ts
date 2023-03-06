@@ -1,7 +1,7 @@
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { client } from '../ApolloClient';
-import login from '@mutations/login.graphql';
+import { client } from '@src/ApolloClient';
+import { LOGIN } from '@src/graphql';
 import * as crypto from 'crypto';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 export default CredentialsProvider({
   type: 'credentials',
@@ -18,7 +18,7 @@ export default CredentialsProvider({
 
     try {
       const { data } = await client.mutate({
-        mutation: login,
+        mutation: LOGIN,
         variables: {
           loginInput: {
             username,
@@ -28,12 +28,8 @@ export default CredentialsProvider({
         },
       });
 
-      const { username: _username, email, _id } = data.login;
-
       return data.login;
     } catch (error) {
-      console.log(error);
-
       throw new Error('Unauthorized');
     }
   },

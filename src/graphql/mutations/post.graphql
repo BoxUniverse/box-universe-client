@@ -1,6 +1,0 @@
-mutation post($content: String!) {
-  post(content: $content) {
-    id
-    content
-  }
-}

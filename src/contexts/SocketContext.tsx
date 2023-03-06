@@ -1,4 +1,4 @@
-import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 import { getSession } from 'next-auth/react';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';

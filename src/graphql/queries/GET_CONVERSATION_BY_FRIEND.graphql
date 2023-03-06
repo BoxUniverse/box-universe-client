@@ -1,0 +1,5 @@
+query getConversationByFriend($profileId: String!, $friendId: String!) {
+  getConversationByFriend(profileId: $profileId, friendId: $friendId) {
+    _id
+  }
+}

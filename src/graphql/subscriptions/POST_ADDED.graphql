@@ -1,0 +1,24 @@
+subscription postAdded($publisher: PublisherSubscriptions) {
+  postAdded(publisher: $publisher) {
+    _id
+    content
+    profile {
+      id
+      name
+      avatar
+      friends {
+        ... on FriendProfile {
+          friendId
+        }
+        ... on Profile {
+          id
+          provider
+          avatar
+          name
+        }
+      }
+    }
+    createdAt
+    updatedAt
+  }
+}

@@ -1,12 +1,12 @@
-import React, { memo, ReactNode } from 'react';
-import Blob from '@components/Blob';
+import { Blob } from '@components';
+import bg from '@images/bg.png';
+import imageForm from '@images/logo.png';
 import Mesh1 from '@images/mesh3.jpg';
 import Mesh2 from '@images/mesh4.jpg';
-import imageForm from '@images/logo.png';
-import bg from '@images/bg.png';
-import Image from 'next/image';
-import withLogout from '@middlewares/logout';
 import { BaseLayout } from '@layouts/BaseLayout';
+import withLogout from '@middlewares/logout';
+import Image from 'next/image';
+import { memo, ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;

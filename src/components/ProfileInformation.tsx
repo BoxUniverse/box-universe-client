@@ -1,12 +1,12 @@
+import { useMutation } from '@apollo/client';
+import { Input } from '@components';
+import { usePublish, useToast } from '@hooks';
 import { Avatar, Badge, Tooltip } from '@mui/material';
-import React, {
-  ChangeEvent,
-  MouseEvent,
-  MouseEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { update } from '@src/features/user/userSlice';
+import { UNFRIEND, UPLOAD_AVATAR } from '@src/graphql';
+import { RootState, StoreDispatch } from '@stores/app';
+import { useSession } from 'next-auth/react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   IoBanSharp,
   IoCallOutline,
@@ -16,15 +16,7 @@ import {
   IoPersonAdd,
   IoPersonOutline,
 } from 'react-icons/io5';
-import Input from '@components/Input';
-import { useToast, usePublish } from '@hooks';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import uploadAvatar from '@mutations/uploadAvatar.graphql';
-import { useSession } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, StoreDispatch } from '@stores/app';
-import { update } from '@features/user/userSlice';
-import UNFRIEND from '@mutations/unfriend.graphql';
 
 type Props = {
   data: any;
@@ -34,10 +26,8 @@ type Props = {
 const ProfileInformation = ({ data, me }: Props) => {
   const toast = useToast();
   const inputFileRef = useRef<HTMLInputElement>();
-  const [upload, { data: _file, loading }] = useMutation(uploadAvatar);
+  const [upload, { loading }] = useMutation(UPLOAD_AVATAR);
   const [isFriend, setFriend] = useState(false);
-
-  const [isUpdate, setUpdate] = useState<boolean>(false);
 
   const user = useSelector<RootState>((state) => state.userSlice.user) as any;
 
@@ -48,7 +38,7 @@ const ProfileInformation = ({ data, me }: Props) => {
   }, [user, data]);
 
   const [avatar, setAvatar] = useState<string>(user.avatar);
-  const [unfriend, { data: resultUnfriend, error }] = useMutation(UNFRIEND);
+  const [unfriend, { data: resultUnfriend }] = useMutation(UNFRIEND);
 
   const dispatch = useDispatch<StoreDispatch>();
   const { data: session } = useSession();
@@ -94,8 +84,8 @@ const ProfileInformation = ({ data, me }: Props) => {
       });
     }
   }, [resultUnfriend]);
-  const handleBlock = (event: MouseEvent<HTMLDivElement>) => {
-    unfriend({
+  const handleBlock = () => {
+    void unfriend({
       variables: {
         friend: {
           userId: session?.user?._id,
@@ -118,8 +108,6 @@ const ProfileInformation = ({ data, me }: Props) => {
       },
       // errorPolicy: 'all',copy
     });
-
-    console.log(file);
 
     reader.onload = (event) => {
       setAvatar(() => event.target.result.toString());
@@ -194,6 +182,7 @@ const ProfileInformation = ({ data, me }: Props) => {
         <div className="group-form flex flex-col justify-center">
           <label className="uppercase">name</label>
           <Input
+            border="purple"
             value={data.name}
             width="w-full"
             height="h-12"
@@ -210,6 +199,7 @@ const ProfileInformation = ({ data, me }: Props) => {
         <div className="group-form flex flex-col justify-center">
           <label className="uppercase">email</label>
           <Input
+            border="purple"
             value={data.email}
             width="w-full"
             height="h-12"
@@ -226,6 +216,7 @@ const ProfileInformation = ({ data, me }: Props) => {
         <div className="group-form flex flex-col justify-center">
           <label className="uppercase">Phone number</label>
           <Input
+            border="purple"
             value={data.email}
             width="w-full"
             height="h-12"

@@ -1,0 +1,14 @@
+mutation commentPost($post: String!, $text: String!) {
+  commentPost(post: $post, text: $text) {
+    post {
+      _id
+      content
+    }
+    profile {
+      id
+      avatar
+      name
+    }
+    text
+  }
+}

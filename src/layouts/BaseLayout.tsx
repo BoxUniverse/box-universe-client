@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import { useSubscribe, useToast } from '@hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, StoreDispatch } from '@stores/app';
-import userSlice, { update } from '@source/features/user/userSlice';
+import { update } from '@src/features/user/userSlice';
 
 type Props = {
   children: React.ReactNode;
@@ -15,13 +15,15 @@ export const BaseLayout: React.FC<Props> = ({ children }: Props) => {
   const dispatch = useDispatch<StoreDispatch>();
   useSubscribe('publish/notifications.SEND_NOTIFICATION', (payload) => {
     toast(payload.type, payload.message);
-    const { userReceive } = payload;
-    dispatch(
-      update({
-        ...user,
-        friends: [...user.friends, userReceive],
-      }),
-    );
+    if (payload.type === 'success') {
+      const { userReceive } = payload;
+      dispatch(
+        update({
+          ...user,
+          friends: [...user.friends, userReceive],
+        }),
+      );
+    }
   });
   return (
     <div>

@@ -1,8 +1,6 @@
-import React from 'react';
-import Friend from '@components/Friend';
-import { IoSearchOutline } from 'react-icons/io5';
-import { useSelector } from 'react-redux';
+import { Friend } from '@components';
 import { RootState } from '@stores/app';
+import { useSelector } from 'react-redux';
 
 const ListFriend = () => {
   const user = useSelector<RootState>((state) => state.userSlice.user) as any;
@@ -15,21 +13,6 @@ const ListFriend = () => {
         </div>
       </div>
 
-      <div className="mt-5 w-full flex items-center relative ">
-        <input
-          name="search"
-          placeholder="Search Friend"
-          id="username"
-          className="placeholder:select-none neon text-lg align-middle placeholder:text-sm placeholder:uppercase  h-12 bg-transparent rounded-lg focus: outline-0 w-full pl-10 border-box border-purple-500 "
-          autoComplete="off"
-          spellCheck="false"
-        />
-        <IoSearchOutline
-          color="white"
-          className="absolute top-1/2 transform -translate-y-1/2 ml-3 "
-          size={20}
-        />
-      </div>
       <div className="list-friends h-full overflow-scroll pb-56">
         {user?.friends && user.friends.map((friend) => <Friend key={friend.id} info={friend} />)}
       </div>

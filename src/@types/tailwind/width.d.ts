@@ -72,3 +72,30 @@ type OmitAmount = Exclude<
 >;
 
 type Height = `h-${OmitAmount}`;
+type Color =
+  | 'pink'
+  | 'purple'
+  | 'orange'
+  | 'slate'
+  | 'gray'
+  | 'zinc'
+  | 'neutural'
+  | 'stonel'
+  | 'red'
+  | 'amber'
+  | 'yellow'
+  | 'lime'
+  | 'green'
+  | 'emerald'
+  | 'teal'
+  | 'cyan'
+  | 'sky'
+  | 'blue'
+  | 'indigo'
+  | 'violet'
+  | 'fuchsia'
+  | 'rose' | 'white' | 'black';
+
+type AmountColor = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+
+type Background = `bg-${Omit<Amount, "black" | "white">}-${AmountColor}`;

@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { ItemSidebar } from '@components';
+import { usePublish } from '@hooks';
+import { signOut } from 'next-auth/react';
+import Link from 'next/link';
+import React from 'react';
 import {
   IoChatboxOutline,
   IoExitOutline,
@@ -6,10 +10,6 @@ import {
   IoNotificationsOutline,
   IoSettingsOutline,
 } from 'react-icons/io5';
-import Link from 'next/link';
-import ItemSidebar from '@components/ItemSidebar';
-import { signOut } from 'next-auth/react';
-import { usePublish } from '@hooks';
 
 type Props = {
   page: string;

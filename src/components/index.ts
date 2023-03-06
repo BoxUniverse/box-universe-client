@@ -1,16 +1,33 @@
-export * from './Blob';
-export * from './BlobStatic';
-export * from './Friend';
-export * from './FriendChat';
-export * from './ItemSidebar';
-export * from './ListFriend';
-export * from './ListFriendChat';
-export * from './ListRequest';
-export * from './MessageReceiver';
-export * from './MessageSender';
-export * from './Newsfeed';
-export * from './Post';
-export * from './Request';
-export * as Sidebar from './Sidebar';
-export * from './Topbar';
-export * from './WritePost';
+
+// @index('./**/*.tsx', f => `export {default as ${f.name}} from '${f.path}'`)
+export {default as Blob} from './Blob'
+export {default as BoxChat} from './BoxChat'
+export {default as Comment} from './Comment'
+export {default as Conversation} from './Conversation'
+export {default as DropdownSearchBar} from './DropdownSearchBar'
+export {default as Friend} from './Friend'
+export {default as Input} from './Input'
+export {default as ItemDropdownSearchBar} from './ItemDropdownSearchBar'
+export {default as ItemSidebar} from './ItemSidebar'
+export {default as ListFriend} from './ListFriend'
+export {default as ListFriendChat} from './ListFriendChat'
+export {default as ListRequest} from './ListRequest'
+export {default as MessageImage} from './MessageImage'
+export {default as MessageReceiver} from './MessageReceiver'
+export {default as MessageSender} from './MessageSender'
+export {default as Modal} from './Modal'
+export {default as ModalCallVideo} from './ModalCallVideo'
+export {default as ModalComment} from './ModalComment'
+export {default as ModalListFriend} from './ModalListFriend'
+export {default as ModalViewImage} from './ModalViewImage'
+export {default as Newsfeed} from './Newsfeed'
+export {default as Post} from './Post'
+export {default as ProfileInformation} from './ProfileInformation'
+export {default as Request} from './Request'
+export {default as SearchBar} from './SearchBar'
+export {default as Sidebar} from './Sidebar'
+export {default as Textarea} from './Textarea'
+export {default as TooltipWithIcon} from './TooltipWithIcon'
+export {default as Topbar} from './Topbar'
+export {default as WritePost} from './WritePost'
+// @endindex

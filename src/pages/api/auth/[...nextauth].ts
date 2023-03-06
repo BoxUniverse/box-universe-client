@@ -1,13 +1,13 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import { CookieSerializeOptions } from 'cookie';
 import CredentialsProvider from '@providers/CredentialsProvider';
-import FacebookProvider from '@providers/FacebookProvider';
-import GoogleProvider from '@providers/GoogleProvider';
-import GithubProvider from '@providers/GithubProvider';
-import * as crypto from 'crypto';
-import { client } from '@source/ApolloClient';
-import OAuth from '@mutations/OAuth.graphql';
 import DiscordProvider from '@providers/DiscordProvider';
+import FacebookProvider from '@providers/FacebookProvider';
+import GithubProvider from '@providers/GithubProvider';
+import GoogleProvider from '@providers/GoogleProvider';
+import { client } from '@src/ApolloClient';
+import { OAUTH } from '@src/graphql';
+import { CookieSerializeOptions } from 'cookie';
+import * as crypto from 'crypto';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 export const cookiesOptions: CookieSerializeOptions = {
   sameSite: 'lax',
   secure: true,
@@ -58,7 +58,7 @@ export const authOptions: NextAuthOptions = {
 
         try {
           await client.mutate({
-            mutation: OAuth,
+            mutation: OAUTH,
             variables: {
               OAuthInput: {
                 name: user.name,
@@ -70,14 +70,13 @@ export const authOptions: NextAuthOptions = {
             },
           });
         } catch (error: any) {
-          console.log(error);
           return false;
         }
       }
 
       return !!user;
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       session.user.username = token.username as string;
       session.user.email = token.email;
       session.user._id = token._id as string;
@@ -85,7 +84,7 @@ export const authOptions: NextAuthOptions = {
       else session.user._id = token.sub;
       return { ...session };
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user?.username) {
         token.username = user.username;
         token.name = user.name;

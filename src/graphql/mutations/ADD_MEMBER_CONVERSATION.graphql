@@ -1,0 +1,5 @@
+mutation addMemberConversation($conversationId: String!, $profileIds: [String!]!) {
+  addMemberConversation(conversationId: $conversationId, profileIds: $profileIds) {
+    _id
+  }
+}
