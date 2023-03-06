@@ -87,9 +87,6 @@ const Request = ({ data }: Props) => {
         },
       },
     });
-    // TODO: emit event to userRequest and show notification
-
-    // dispatchii(update({}));
     setRemove(true);
   };
 

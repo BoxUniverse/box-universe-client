@@ -172,7 +172,6 @@ const Chat: NextPageWithLayout = () => {
 
       if (message.length > 0 && message) {
         setSend(true);
-        // TODO: handle send message
         void send({
           variables: {
             payload: {
