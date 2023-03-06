@@ -1,6 +1,6 @@
-import React from 'react';
 import styles from '@styles/blob.module.scss';
 import classnames from 'classnames';
+import React from 'react';
 
 type Props = {
   image: string;
@@ -10,7 +10,7 @@ type Props = {
 const Blob = (props: Props) => {
   const { image, x, y } = props;
   /* eslint-disable */
-  console.log('blob-render');
+  
 
   return (
     <div className="lg:flex hidden">

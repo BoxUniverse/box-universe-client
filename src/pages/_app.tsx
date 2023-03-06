@@ -1,17 +1,17 @@
-import '../styles/globals.css';
-import React, { ReactElement, ReactNode } from 'react';
-import { NextPage } from 'next';
-import type { AppProps } from 'next/app';
-import { Provider } from 'react-redux';
-import store, { wrapper, persistor } from '@stores/app';
-import Head from 'next/head';
-import favicon from '@images/favicon.ico';
 import { ApolloProvider } from '@apollo/client';
-import { PersistGate } from 'redux-persist/integration/react';
+import { SocketProvider } from '@contexts';
+import favicon from '@images/favicon.ico';
+import store, { persistor, wrapper } from '@stores/app';
+import { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import { ReactElement, ReactNode } from 'react';
+import { Provider } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
-import { SocketProvider } from '@contexts/SocketContext';
+import { PersistGate } from 'redux-persist/integration/react';
 import { useApollo } from '../ApolloClient';
+import '../styles/globals.css';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

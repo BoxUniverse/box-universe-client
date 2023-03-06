@@ -1,7 +1,18 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import Link from 'next/link';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useThrottle } from '@hooks';
+import DiscordLogo from '@images/discord.png';
+import FacebookLogo from '@images/facebook.svg';
+import GithubLogo from '@images/github.png';
+import GoogleLogo from '@images/google.png';
+import AuthLayout from '@layouts/AuthLayout';
+import { Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
+import LoginSchema from '@validations/LoginSchema';
+import { signIn } from 'next-auth/react';
+import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
+import { ReactElement, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   IoArrowForwardOutline,
   IoEyeOffOutline,
@@ -10,22 +21,9 @@ import {
   IoPersonOutline,
   IoWarningOutline,
 } from 'react-icons/io5';
-import { Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
-import { yupResolver } from '@hookform/resolvers/yup';
-import LoginSchema from '@validations/LoginSchema';
-import { NextPageWithLayout } from '../_app';
-import AuthLayout from '@layouts/AuthLayout';
-import Head from 'next/head';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useThrottle from '@hooks/useThrottle';
-import { signIn } from 'next-auth/react';
-import FacebookLogo from '@images/facebook.svg';
-import GoogleLogo from '@images/google.png';
-import DiscordLogo from '@images/discord.png';
-import GithubLogo from '@images/github.png';
-import { SocketContext, useSocket } from '@contexts/SocketContext';
-import { getCookie } from 'cookies-next';
+import { NextPageWithLayout } from '../_app';
 
 type Inputs = { username: string; password: string };
 const Login: NextPageWithLayout = () => {
@@ -39,7 +37,6 @@ const Login: NextPageWithLayout = () => {
   });
 
   const [disable, setDisable] = useState<boolean>(false);
-  const { socket } = useSocket();
 
   const login = async (username: string, password: string) => {
     try {
@@ -52,7 +49,7 @@ const Login: NextPageWithLayout = () => {
       const error = response?.error;
 
       // if (user) {
-      //   console.log(user, 'sdsd');
+      //
       //
       //   socket.emit('login', 'Sdsdsd');
       // }

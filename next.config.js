@@ -8,6 +8,19 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, '/src/styles/')],
   },
+  productionBrowserSourceMaps: true,
+
+  images: {
+    domains: ['boxuniverse.s3.ap-southeast-1.amazonaws.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'boxuniverse.s3.ap-southeast-1.amazonaws.com',
+        port: '',
+        pathname: '*',
+      },
+    ],
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

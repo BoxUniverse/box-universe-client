@@ -1,0 +1,40 @@
+query getPosts($payload: GetPosts!) {
+  getPosts(payload: $payload) {
+    _id
+    content
+    countLike
+    countComment
+    likes {
+      provider
+      friends {
+        ... on FriendProfile {
+          friendId
+        }
+        ... on Profile {
+          id
+          provider
+          avatar
+          name
+        }
+      }
+    }
+    profile {
+      id
+      provider
+      avatar
+      name
+      friends {
+        ... on FriendProfile {
+          friendId
+        }
+        ... on Profile {
+          id
+          provider
+          avatar
+          name
+        }
+      }
+    }
+    isLiked
+  }
+}

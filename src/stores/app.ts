@@ -1,27 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from '../reducers';
 import { createWrapper } from 'next-redux-wrapper';
-import {
-  persistStore,
-  persistReducer,
-  PersistConfig,
-  // FLUSH,
-  // REHYDRATE,
-  // PAUSE,
-  // PERSIST,
-  // PURGE,
-  // REGISTER,
-} from 'redux-persist';
+import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
-import { encryptTransform } from 'redux-persist-transform-encrypt';
+import rootReducer from '../reducers';
 
 const persistConfig: PersistConfig<any> = {
   key: 'root',
   version: 1,
   storage,
 
-  // blacklist: ['requestSlice'],
+  blacklist: ['modalSlice'],
+  // transforms: [
+  //   encryptTransform({
+  //     secretKey: 'boxuniverse',
+  //     onError: function (error) {
+  //       // Handle the error.
+  //     },
+  //   }),
+  // ],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

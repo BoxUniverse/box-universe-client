@@ -1,7 +1,6 @@
-import React from 'react';
+import { SearchBar } from '@components';
 import logo from '@images/logo.png';
 import Image from 'next/image';
-import { SearchBar } from '@components/SearchBar';
 
 type Props = {
   page: string;
@@ -9,7 +8,7 @@ type Props = {
 export const Topbar = (props: Props) => {
   const { page } = props;
   return (
-    <div className="fixed text-white left-2 top-0 h-1/6 w-full flex flex-row justify-between pr-5  before:absolute before:backdrop-blur-md before:top-0 before:left-0 before:-z-10 before:w-full before:h-full z-50">
+    <div className="fixed text-white left-2 top-0 h-1/7 w-full flex flex-row justify-between pr-5  before:absolute before:backdrop-blur-md before:top-0 before:left-0 before:-z-10 before:w-full before:h-full z-50">
       <div className="flex flex-row">
         <div className="flex  w-20 h-full justify-center items-center ">
           <Image src={logo.src} alt="logo" width={80} height={80} />
@@ -26,3 +25,5 @@ export const Topbar = (props: Props) => {
     </div>
   );
 };
+
+export default Topbar;

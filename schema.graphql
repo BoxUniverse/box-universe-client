@@ -1,0 +1,316 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
+}
+
+union UnionFriend = FriendProfile | Profile
+
+type Comment {
+    _id: ID!
+    createdAt: String!
+    deletedAt: String!
+    post: Post!
+    profile: Profile!
+    text: String!
+    updatedAt: String!
+}
+
+type Conversation {
+    _id: ID!
+    members: [Profile!]!
+    name: String
+}
+
+type Current {
+    _id: ID!
+    createdAt: String!
+    deletedAt: String!
+    email: String!
+    "id"
+    id: String!
+    name: String!
+    password: String
+    picture: String!
+    providers: [Provider!]!
+    refreshToken: String
+    updatedAt: String!
+    username: String
+}
+
+type DeleteResult {
+    acknowledged: Boolean!
+    deletedCount: Float!
+}
+
+type File {
+    encoding: String
+    filename: String
+    mimetype: String
+    url: String
+}
+
+type FileInfo {
+    type: String!
+    url: String!
+}
+
+type FriendProfile {
+    friendId: String
+}
+
+type FriendsProfile {
+    friends: [UnionFriend!]
+}
+
+type Like {
+    _id: ID!
+    createdAt: String!
+    deletedAt: String!
+    post: Post!
+    profile: Profile!
+    updatedAt: String!
+}
+
+type ListFriendNotInConversation {
+    result: [Profile!]!
+}
+
+type Message {
+    _id: ID
+    conversation: ID!
+    createdAt: String!
+    files: [FileInfo!]
+    message: String
+    sender: Profile!
+    type: String!
+}
+
+type MessageOmit {
+    _id: ID
+    createdAt: String!
+    files: [FileInfo!]
+    message: String
+    sender: Profile!
+    type: String!
+}
+
+type MessagesConversation {
+    _id: ID!
+    messages: [MessageOmit!]!
+}
+
+type Mutation {
+    OAuth(OAuthInput: OAuthInput!): User!
+    acceptRequest(request: InfoRequest!): Request
+    addMemberConversation(conversationId: String!, profileIds: [String!]!): Conversation
+    addRequest(request: CreateRequest!): Request!
+    changeNameConversation(payload: ChangeNameConversation!): Conversation
+    commentPost(post: String!, text: String!): Comment!
+    createConversation(infoConversation: CreateConversation!): Boolean
+    createPost(post: CreatePost!): Post!
+    createUser(createInput: CreateInput!): User
+    deleteComment(id: ID!): Comment!
+    deleteEntireUser: DeleteResult
+    deletePost(post: DeletePost!): Post
+    deleteUser(userInput: UserInput!): User
+    likePost(post: String!): Like
+    login(loginInput: LoginInput!): User
+    register(createInput: CreateInput!): User!
+    rejectRequest(request: InfoRequest!): Request
+    sendFiles(files: [Upload!]!, payload: SendFiles!): Message
+    sendMessage(payload: Send!): Message
+    softDeleteUser(userInput: UserInput!): User
+    unfriend(friend: Friend!): Float
+    unlikePost(post: String!): Float!
+    uploadAvatar(file: Upload!, id: String!): File
+}
+
+type Post {
+    _id: ID
+    content: String
+    countComment: Float!
+    countLike: Float!
+    createdAt: String!
+    deletedAt: String!
+    isLiked: Boolean!
+    likes: [Profile!]!
+    profile: Profile!
+    updatedAt: String!
+}
+
+type Profile {
+    avatar: String!
+    email: String!
+    friends: [UnionFriend!]
+    id: String!
+    name: String!
+    provider: String
+}
+
+type Provider {
+    id: String
+    type: String!
+}
+
+type Query {
+    getComments(post: String!): [Comment!]
+    getConversationByFriend(friendId: String!, profileId: String!): Conversation
+    getConversationById(conversationId: String!): Conversation
+    getConversationByProfileId(profileId: String!): [Conversation!]
+    getEntireFriends: FriendsProfile
+    getEntireProfile: [Profile!]!
+    getListFriendNotInConversation(conversationId: String!): ListFriendNotInConversation
+    getListUsers: [User!]
+    getMessagesByConversationId(payload: PaginationMessages!): MessagesConversation
+    getPosts(payload: GetPosts): [Post!]
+    getProfile(profileInput: Obtain!): Profile!
+    getRequests(request: RetrieveRequest!): [Request!]!
+    getUser(userInput: UserInput!): User
+    me: Current
+    searchUser(searchInput: Search!): [Profile!]!
+}
+
+type Request {
+    _id: ID!
+    isAccept: Boolean!
+    isPending: Boolean!
+    isReject: Boolean!
+    userReceive: Profile!
+    userRequest: Profile!
+}
+
+type Subscription {
+    commentAdded(post: String!): Post
+    memberAdded: Conversation
+    newLike(post: String!): Post!
+    postAdded(publisher: PublisherSubscriptions): Post!
+    requestAdded: [Request!]!
+}
+
+type User {
+    _id: ID!
+    createdAt: String!
+    deletedAt: String!
+    email: String!
+    password: String
+    providers: [Provider!]!
+    refreshToken: String
+    updatedAt: String!
+    username: String
+}
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload
+
+input ChangeNameConversation {
+    _id: ID!
+    name: String
+}
+
+input CreateConversation {
+    members: [String!]!
+    name: String!
+}
+
+input CreateInput {
+    email: String
+    password: String
+    provider: ProviderInput!
+    username: String
+}
+
+input CreatePost {
+    "content of post"
+    content: String
+    "count like of post"
+    countLike: Float
+}
+
+input CreateRequest {
+    userReceive: ID!
+    userRequest: ID
+}
+
+input DeletePost {
+    _id: ID
+}
+
+input Friend {
+    friendId: String!
+    userId: String!
+}
+
+input GetPosts {
+    _id: String
+}
+
+input InfoRequest {
+    userReceive: ID
+    userRequest: ID
+}
+
+input LoginInput {
+    nonce: String!
+    password: String!
+    username: String!
+}
+
+input OAuthInput {
+    email: String
+    id: String
+    name: String
+    nonce: String
+    provider: String
+}
+
+input Obtain {
+    id: String!
+}
+
+input PaginationMessages {
+    conversationId: String!
+    startValue: ID
+}
+
+input ProviderInput {
+    id: String
+    type: String!
+}
+
+input PublisherSubscriptions {
+    id: ID!
+}
+
+input RetrieveRequest {
+    isAccept: Boolean!
+    isPending: Boolean!
+    isReject: Boolean!
+    userReceive: ID
+    userRequest: ID
+}
+
+input Search {
+    keyword: String!
+}
+
+input Send {
+    conversationId: ID!
+    message: String!
+    now: Float!
+}
+
+input SendFiles {
+    conversationId: ID!
+    now: Float!
+}
+
+input UserInput {
+    _id: String
+    email: String
+    password: String
+    refreshToken: String
+    username: String
+}

@@ -1,0 +1,10 @@
+mutation sendFiles($files: [Upload!]!, $payload: SendFiles!) {
+  sendFiles(files: $files, payload: $payload) {
+    _id
+    type
+    files {
+      url
+      type
+    }
+  }
+}

@@ -1,0 +1,22 @@
+mutation createPost($post: CreatePost!) {
+  createPost(post: $post) {
+    _id
+    content
+    profile {
+      id
+      avatar
+      name
+      friends {
+        ... on FriendProfile {
+          friendId
+        }
+        ... on Profile {
+          id
+          provider
+          avatar
+          name
+        }
+      }
+    }
+  }
+}

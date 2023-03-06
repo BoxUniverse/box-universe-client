@@ -16,7 +16,7 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@components/*": ["./src/components/*"],
+      "@components": ["./src/components/index"],
       "@pages/*": ["./src/pages/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@styles/*": ["./src/styles/*"],
@@ -25,14 +25,13 @@
       "@vendors/*": ["./src/assets/vendors/*"],
       "@stores/*": ["./src/stores/*"],
       "@providers/*": ["./src/providers/*"],
-      "@mutations/*": ["./src/graphql/mutations/*"],
-      "@hooks/*": ["./src/hooks/*"],
       "@hooks": ["./src/hooks/index"],
-      "@queries/*": ["./src/graphql/queries/*"],
-      "@contexts/*": ["./src/contexts/*"],
+      "@mutations": ["./src/graphql/mutations/index"],
+      "@queries": ["./src/graphql/queries/index"],
+      "@subscriptions": ["./src/graphql/subscriptions/index"],
+      "@contexts": ["./src/contexts/index"],
       "@middlewares/*": ["./src/middlewares/*"],
-      "@handlers/*": ["./src/handlers/*"],
-      "@source/*": ["./src/*"],
+      "@src/*": ["./src/*"],
       "@features/*": ["./src/features/*"]
     }
   },

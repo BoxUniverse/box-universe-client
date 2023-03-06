@@ -1,0 +1,13 @@
+mutation likePost($post: String!) {
+  likePost(post: $post) {
+    post {
+      _id
+      content
+    }
+    profile {
+      id
+      avatar
+      name
+    }
+  }
+}

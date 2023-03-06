@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { usePublish } from '@hooks';
 import { Avatar, Badge } from '@mui/material';
-import { IoCheckmarkOutline, IoCloseOutline } from 'react-icons/io5';
-import Link from 'next/link';
-import acceptRequest from '@mutations/acceptRequest.graphql';
-import rejectRequest from '@mutations/rejectRequest.graphql';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import usePublish from '@hooks/usePublish';
-import { useToast } from '@hooks';
-
-import useSubscribe from '@hooks/useSubscribe';
-import { useDispatch, useSelector } from 'react-redux';
+import { update } from '@src/features/user/userSlice';
+import { ACCEPT_REQUEST, REJECT_REQUEST } from '@src/graphql';
 import { RootState, StoreDispatch } from '@stores/app';
-import { update } from '@source/features/user/userSlice';
-import getProfile from '@queries/getProfile.graphql';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { IoCheckmarkOutline, IoCloseOutline } from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Request = {
   userRequest: {
@@ -31,11 +26,10 @@ type Props = {
 
 const Request = ({ data }: Props) => {
   const [isRemove, setRemove] = useState<boolean>(false);
-  const [requestor, setRequestor] = useState<any>({});
 
-  let [aRequest, { error: aError, data: aData }] = useMutation(acceptRequest);
+  let [aRequest, { data: aData }] = useMutation(ACCEPT_REQUEST);
 
-  let [rRequest, { error: rError, data: rData }] = useMutation(rejectRequest);
+  let [rRequest, { data: rData }] = useMutation(REJECT_REQUEST);
   const publish = usePublish();
 
   const dispatch = useDispatch<StoreDispatch>();
@@ -61,7 +55,6 @@ const Request = ({ data }: Props) => {
         request: { ...aData.acceptRequest, type: 'accepted' },
       });
       const { userRequest } = aData.acceptRequest;
-      console.log('aData', aData);
 
       const requestor = {
         id: userRequest.id,
@@ -96,7 +89,7 @@ const Request = ({ data }: Props) => {
     });
     // TODO: emit event to userRequest and show notification
 
-    // dispatch(update({}));
+    // dispatchii(update({}));
     setRemove(true);
   };
 

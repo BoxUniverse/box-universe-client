@@ -1,0 +1,3 @@
+mutation changeNameConversation($payload: ChangeNameConversation!) {
+  changeNameConversation(payload: $payload)
+}

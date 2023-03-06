@@ -1,9 +1,9 @@
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import getEntireProfile from '@queries/getEntireProfile.graphql';
 import { useLazyQuery } from '@apollo/client';
-import DropdownSearchBar from './DropdownSearchBar';
-import { IoSearchOutline } from 'react-icons/io5';
+import { DropdownSearchBar } from '@components';
+import { GET_ENTIRE_PROFILE } from '@src/graphql';
 import { useSession } from 'next-auth/react';
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import { IoSearchOutline } from 'react-icons/io5';
 
 export const SearchBar = () => {
   const [keyword, setKeyword] = useState<string>('');
@@ -12,7 +12,7 @@ export const SearchBar = () => {
   const dropdownRef = React.createRef<HTMLDivElement>();
   const { data: session } = useSession();
 
-  const [getAll, { data }] = useLazyQuery(getEntireProfile);
+  const [getAll, { data }] = useLazyQuery(GET_ENTIRE_PROFILE);
 
   const [listUser, setListUser] = useState<Array<any>>([]);
 
@@ -26,7 +26,7 @@ export const SearchBar = () => {
     if (data) {
       const re = new RegExp(`.*${kw}.*`, 'i');
 
-      console.log(data);
+      
       const listUserFilter = data?.getEntireProfile?.filter(
         (user: any) => re.test(user.name) && user.id !== session.user._id,
       );
@@ -66,3 +66,5 @@ export const SearchBar = () => {
     </div>
   );
 };
+
+export default SearchBar;

@@ -1,12 +1,10 @@
-import { useMemo } from 'react';
-import { ApolloClient, HttpLink, InMemoryCache, from, ApolloLink, split } from '@apollo/client';
-import WebSocket from 'ws';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createUploadLink } from 'apollo-upload-client';
+import { ApolloClient, ApolloLink, from, InMemoryCache, split } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { getCookie } from 'cookies-next';
-import { createClient } from 'graphql-ws';
+import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { createUploadLink } from 'apollo-upload-client';
+import { getCookie } from 'cookies-next';
+import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<any>;
 
@@ -15,7 +13,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
       // eslint-disable-next-line no-console
-      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`),
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+          locations,
+        )}, Path: ${path}`,
+      ),
     );
   // eslint-disable-next-line no-console
   if (networkError) console.log(`[Network error]: ${networkError}`);
@@ -24,14 +26,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 function createApolloClient(pageProps?: any, ...link: any) {
   const cookies = pageProps?.cookies;
 
-  // const httpLink = new HttpLink({
-  //   uri: 'http://172.26.22.101:3000/graphql',
-  //   credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
-  //   headers: {
-  //     Authorization: `Bearer ${cookies?.accessToken}`,
-  //     'Access-Control-Allow-Credentials': '*',
-  //   },
-  // });
   const uploadLink: any = createUploadLink({
     uri: 'http://172.26.22.101:3000/graphql',
 
@@ -41,14 +35,21 @@ function createApolloClient(pageProps?: any, ...link: any) {
       'Access-Control-Allow-Credentials': '*',
     },
   });
-  const wsLink =
-    // typeof window !== 'undefined'
-    new GraphQLWsLink(
-      createClient({
-        webSocketImpl: WebSocket,
-        url: 'ws://172.26.22.101:3000/subscription',
-      }),
-    );
+
+  const wsLink = process.browser
+    ? new WebSocketLink({
+        // if you instantiate in the server, the error will be thrown
+        uri: `ws://172.26.22.101:3000/graphql`,
+        options: {
+          reconnect: true,
+
+          connectionParams: {
+            Authorization: `Bearer ${cookies?.accessToken}`,
+            'Access-Control-Allow-Credentials': '*',
+          },
+        },
+      })
+    : null;
   const splitLink =
     typeof window !== 'undefined' && wsLink !== null
       ? split(

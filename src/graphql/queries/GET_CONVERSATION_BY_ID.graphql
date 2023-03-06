@@ -1,0 +1,11 @@
+query getConversationById($conversationId: String!) {
+  getConversationById(conversationId: $conversationId) {
+    _id
+    name
+    members {
+      id
+      name
+      avatar
+    }
+  }
+}

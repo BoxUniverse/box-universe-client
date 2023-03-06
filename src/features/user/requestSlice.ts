@@ -11,11 +11,11 @@ const requestSlice = createSlice({
   name: 'request',
   initialState,
   reducers: {
-    update(state, action) {
+    updateRequest(state, action) {
       return { ...state, friendRequest: action.payload };
     },
   },
 });
 
-export const { update } = requestSlice.actions;
+export const { updateRequest } = requestSlice.actions;
 export default requestSlice.reducer;

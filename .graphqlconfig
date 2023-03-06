@@ -1,0 +1,16 @@
+{
+  "name": "Box Universe GraphQL Schema",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "${env:ENDPOINT_GQL}",
+        "headers": {
+          "Authorization": "Bearer ${env:TOKEN}",
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": false
+      }
+    }
+  }
+}

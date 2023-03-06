@@ -1,11 +1,11 @@
-import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState, MouseEvent } from 'react';
-import { IoHappyOutline, IoImageOutline, IoVideocamOutline } from 'react-icons/io5';
 import 'emoji-mart-next/css/emoji-mart.css';
-
+import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import { IoHappyOutline, IoImageOutline, IoVideocamOutline } from 'react-icons/io5';
 // @ts-nocheck
-import { Picker } from 'emoji-mart-next';
 import { useMutation } from '@apollo/client';
-import POST from '@mutations/post.graphql';
+import { CREATE_POST } from '@src/graphql';
+import { Picker } from 'emoji-mart-next';
+import { trimStart } from 'lodash';
 
 const WritePost = () => {
   const [showIcon, setShowIcon] = useState<boolean>(false);
@@ -13,14 +13,32 @@ const WritePost = () => {
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const iconEmojiRef = useRef<HTMLDivElement>(null);
   const refTextArea = useRef<HTMLTextAreaElement>(null);
-  const [post, { data, error }] = useMutation(POST);
+  const [newPost] = useMutation(CREATE_POST);
 
-  const handlePost = (e: MouseEvent<HTMLDivElement>) => {
-    post({
-      variables: {
-        content,
-      },
-    });
+  const handlePost = () => {
+    if (trimStart(content).length >= 1)
+      void newPost({
+        variables: {
+          post: {
+            content,
+          },
+        },
+      });
+    setContent('');
+  };
+  const handlePressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && trimStart(content).length >= 1) {
+      e.preventDefault();
+      newPost({
+        variables: {
+          post: {
+            content,
+          },
+        },
+      });
+
+      setContent('');
+    }
   };
 
   const handleInputContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -54,10 +72,11 @@ const WritePost = () => {
         <textarea
           id="content-writing"
           style={{ resize: 'none' }}
-          rows={4}
+          rows={2}
           className="text-lg focus:ring-purple-500 focus:outline-none block p-2.5 pb-9  w-full neon rounded-none bg-transparent border-b border-purple-500 "
           placeholder="Write something ..."
           onInput={handleInputContent}
+          onKeyUp={handlePressEnter}
           value={content}
           ref={refTextArea}
         />

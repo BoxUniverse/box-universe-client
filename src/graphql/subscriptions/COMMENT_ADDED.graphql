@@ -1,0 +1,10 @@
+subscription commentAdded($post: String!) {
+  commentAdded(post: $post) {
+    _id
+    profile {
+      avatar
+      id
+      name
+    }
+  }
+}
