@@ -47,6 +47,13 @@ yarn-error.log*
 
 
 
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
