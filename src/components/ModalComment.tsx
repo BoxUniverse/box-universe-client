@@ -1,15 +1,16 @@
 import { useLazyQuery, useMutation, useSubscription } from '@apollo/client';
-import { Comment, Modal, Textarea } from '@components';
+import { AlwaysScrollToBottom, Comment, Modal, Textarea } from '@components';
 import { Avatar } from '@mui/material';
 import { COMMENT_ADDED, COMMENT_POST, GET_COMMENTS } from '@src/graphql';
 import { RootState } from '@stores/app';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const ModalComment = () => {
   const { modalComment }: any = useSelector<RootState>((state) => state.modalSlice);
   const user: any = useSelector<RootState>((state) => state.userSlice.user);
   const continueComment = useRef<any>(null);
+  const [comments, setComments] = useState([]);
   const boxCommentRef = useRef<HTMLDivElement>(null);
   const commentEndRef = useRef<HTMLDivElement>(null);
   const { data: commentAdded } = useSubscription(COMMENT_ADDED, {
@@ -18,34 +19,27 @@ const ModalComment = () => {
     },
   });
 
-  const [, { data, refetch }] = useLazyQuery(GET_COMMENTS, {
+  const [comment] = useMutation(COMMENT_POST);
+  const [getComments, { data, refetch }] = useLazyQuery(GET_COMMENTS, {
     variables: {
       post: modalComment.post._id,
     },
   });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setComment((prev) => [...prev, ...data.getComments]);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    // if (data) setComments((prev) => [...prev, ...data.getComments]);
+  }, [data]);
 
   useEffect(() => {
-    if (commentAdded) {
-      // setComment((prev) => [...prev, commentAdded.commentAdded]);
-
-      void refetch({
-        post: modalComment.post._id,
-      });
-    }
+    if (commentAdded) setComments((prev) => [...prev, commentAdded.commentAdded]);
   }, [commentAdded]);
 
-  const [comment] = useMutation(COMMENT_POST);
-
   useEffect(() => {
-    void refetch({
-      post: modalComment.post._id,
+    refetch().then((result) => {
+      setComments([...result.data.getComments]);
     });
+    // console.log(x);
+    // setComments((prev) => [...prev, ...data.getComments]);
   }, []);
 
   const handleCommentPost = (value: string) => {
@@ -80,12 +74,12 @@ const ModalComment = () => {
             </div>
             <div className="h-fit">
               <div className="comments mt-5 overflow-scroll h-auto max-h-80" ref={boxCommentRef}>
-                {data?.getComments &&
-                  data?.getComments.map((comment) => {
-                    continueComment.current = comment._id;
-                    return <Comment key={comment._id} comment={comment} />;
-                  })}
-                <div ref={commentEndRef} />
+                {comments?.map((comment) => {
+                  continueComment.current = comment._id;
+                  return <Comment key={comment._id} comment={comment} />;
+                })}
+                {/*<div ref={commentEndRef} />*/}
+                <AlwaysScrollToBottom />
               </div>
             </div>
             <div className="flex flex-row w-full gap-5">

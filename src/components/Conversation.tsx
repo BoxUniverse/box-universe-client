@@ -3,6 +3,7 @@ import { updateConversation } from '@src/features/user/conversationSlice';
 import { RootState, StoreDispatch } from '@stores/app';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {MdOutlineGroups} from "react-icons/md"
 
 type Props = {
   info: any;
@@ -45,12 +46,14 @@ const Conversation = ({ info, id, isGroup }: Props) => {
       }
       onClick={handleShowBoxChat}>
       <Badge
-        color="secondary"
+        color="primary"
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
         }}
-        badgeContent={info?.members.length > 1 ? info.members.length + 1 : 0}>
+        // badgeContent={info?.members.length > 1 ? info.members.length + 1 : 0}>
+        badgeContent={info?.members.length > 1 ? <div className={"flex items-center justify-center gap-1"}><MdOutlineGroups size={20} /> <span>Group</span></div>  : 0}>
+        
         <Avatar
           alt={info?.name || info.members[0].name}
           src={

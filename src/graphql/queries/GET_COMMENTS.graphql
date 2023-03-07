@@ -7,10 +7,6 @@ query getComments($post: String!) {
       avatar
       id
     }
-    post {
-      content
-      _id
-    }
   }
 }
 
