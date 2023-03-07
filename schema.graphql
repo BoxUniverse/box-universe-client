@@ -12,6 +12,7 @@ type Comment {
     _id: ID!
     createdAt: String!
     deletedAt: String!
+    "if type of this field is string, only get _id, which is returned from middleware"
     post: Post!
     profile: Profile!
     text: String!
@@ -183,7 +184,7 @@ type Request {
 }
 
 type Subscription {
-    commentAdded(post: String!): Post
+    commentAdded(post: String!): Comment
     memberAdded: Conversation
     newLike(post: String!): Post!
     postAdded(publisher: PublisherSubscriptions): Post!
