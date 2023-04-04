@@ -1,9 +1,11 @@
-import { ApolloClient, ApolloLink, from, InMemoryCache, split } from '@apollo/client';
+import { ApolloClient, ApolloLink, from, HttpLink, InMemoryCache, split } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
+
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getCookie } from 'cookies-next';
+import { createClient } from 'graphql-ws';
 import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<any>;
@@ -27,31 +29,56 @@ function createApolloClient(pageProps?: any, ...link: any) {
   const cookies = pageProps?.cookies;
 
   const uploadLink: any = createUploadLink({
-    uri: 'http://172.26.22.101:3000/graphql',
-
+    uri: 'https://host.docker.internal:2604/graphql/',
     credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
     headers: {
-      Authorization: `Bearer ${cookies?.accessToken}`,
-      'Access-Control-Allow-Credentials': '*',
+      authorization: `Bearer ${cookies?.accessToken}`,
     },
   });
 
-  const wsLink = process.browser
-    ? new WebSocketLink({
-        // if you instantiate in the server, the error will be thrown
-        uri: `ws://172.26.22.101:3000/graphql`,
-        options: {
-          reconnect: true,
+  // const wsLink = process.browser
+  //   ? new WebSocketLink(
+  //       new SubscriptionClient('ws://localhost:2604/graphql/', {
+  //         lazy: true,
+  //         reconnect: true,
+  //         timeout: 30000,
+  //         inactivityTimeout: 10000,
+  //         connectionParams: {
+  //           Authorization: `Bearer ${cookies?.accessToken}`,
+  //           'Access-Control-Allow-Credentials': '*',
+  //           'Access-Control-Allow-Origin': '*',
+  //         },
+  //       }),
+  //     )
+  //   : null;
 
-          connectionParams: {
-            Authorization: `Bearer ${cookies?.accessToken}`,
-            'Access-Control-Allow-Credentials': '*',
-          },
-        },
-      })
-    : null;
+  const wsLink =
+    typeof window !== 'undefined'
+      ? new GraphQLWsLink(
+          createClient({
+            url: 'wss://host.docker.internal:2604/graphql',
+            lazy: true,
+            connectionParams: {
+              authorization: `Bearer ${cookies?.accessToken}`,
+              subscription: true,
+            },
+          }),
+        )
+      : null;
+  // const wsLink = process.browser
+  //   ? new WebSocketLink({
+  //       uri: `ws://localhost:2604/graphql/`,
+  //       options: {
+  //         reconnect: true,
+  //         connectionParams: {
+  //           Authorization: `Bearer ${cookies?.accessToken}`,
+  //           'Access-Control-Allow-Credentials': '*',
+  //         },
+  //       },
+  //     })
+  //   : null;
   const splitLink =
-    typeof window !== 'undefined' && wsLink !== null
+    typeof window !== 'undefined' && wsLink !== null && process.browser
       ? split(
           ({ query }) => {
             const def = getMainDefinition(query);
@@ -79,6 +106,7 @@ function createApolloClient(pageProps?: any, ...link: any) {
     connectToDevTools: true,
   });
 }
+
 export const client = createApolloClient(
   null,
   new ApolloLink((operation, forward) => {
@@ -94,6 +122,7 @@ export const client = createApolloClient(
     return forward(operation);
   }),
 );
+
 export function initializeApollo(pageProps: any) {
   return apolloClient ?? createApolloClient(pageProps);
 }

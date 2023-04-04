@@ -64,7 +64,9 @@ export const ModalListFriend = () => {
     return (
       <Modal
         name="modalListFriend"
-        className="w-full h-full fixed backdrop-blur  flex items-center justify-center"
+        height={'h-full'}
+        width={'w-full'}
+        className="fixed backdrop-blur  flex items-center justify-center"
         style={{ zIndex: 9999, backgroundColor: '#000000a3' }}>
         <div className=" rounded-2xl  w-1/3 h-1/2 text-white flex justify-center opacity-100 p-10">
           <div className="flex flex-col gap-5">

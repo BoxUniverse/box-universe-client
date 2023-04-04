@@ -11,6 +11,8 @@ import {
   IoShareSocialOutline,
 } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
+import { usePublish } from '@hooks';
+import { LongText } from '@src/components';
 
 type Props = {
   post: any;
@@ -22,6 +24,7 @@ const Post = ({ post }: Props) => {
   const [countComment, setCountComment] = useState(post.countComment);
   const dispatch = useDispatch<StoreDispatch>();
   const [isLiked, setLike] = useState(post.isLiked);
+  const publish = usePublish();
 
   const { data: newLikeData } = useSubscription(NEW_LIKE, {
     variables: {
@@ -37,7 +40,7 @@ const Post = ({ post }: Props) => {
 
   useEffect(() => {
     if (commentAdded && commentAdded.commentAdded.post?._id === post._id) {
-      setCountComment(prev => prev + 1);
+      setCountComment((prev) => prev + 1);
     }
   }, [commentAdded]);
 
@@ -45,14 +48,15 @@ const Post = ({ post }: Props) => {
     const variables = {
       post: post._id,
     };
-    if (!isLiked)
+    if (!isLiked) {
       void like({
         variables,
       });
-    else
+    } else {
       void unlike({
         variables,
       });
+    }
 
     setLike(!isLiked);
   };
@@ -69,12 +73,12 @@ const Post = ({ post }: Props) => {
         name: 'modalComment',
         isOpen: true,
         post: post,
-      }),
+      } as any),
     );
   };
   const handleOnShare = () => {};
   return (
-    <div className="post mb-20 ">
+    <div className="post mb-20 last:pb-5 ">
       <div className="flex flex-row justify-between header-post border-b pb-5 border-b-purple-500">
         <div className="flex flex-row items-center ">
           <div className="border rounded-full p-3 cursor-pointer border-purple-500">
@@ -95,7 +99,9 @@ const Post = ({ post }: Props) => {
           </div>
         </div>
       </div>
-      <div className="content-post mt-6 border-b border-b-purple-500 pb-5">{post.content}</div>
+      <div className="content-post mt-6 border-b border-b-purple-500 pb-5">
+        <LongText max={600}>{post.content}</LongText>
+      </div>
       <div className="action-post mt-5 flex flex-row justify-between">
         <div
           className={`relative w-full mr-2 rounded-md ${isLiked ? 'bg-red-500' : 'bg-transparent'}`}

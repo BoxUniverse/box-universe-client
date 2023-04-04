@@ -1,6 +1,6 @@
-mutation register($createInput: CreateInput!) {
-  register(createInput: $createInput) {
-    username
-    email
-  }
+mutation register($createUserInput: CreateUser!) {
+    register(createUserInput: $createUserInput) {
+        username
+        email
+    }
 }

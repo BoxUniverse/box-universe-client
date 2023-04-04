@@ -20,7 +20,7 @@ const Sidebar = (props: Props) => {
   const publish = usePublish();
 
   const logout = () => {
-    publish('logout', null);
+    publish('logout', null, {});
     signOut({ callbackUrl: '/auth/login', redirect: true });
   };
   return (

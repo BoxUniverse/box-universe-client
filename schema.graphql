@@ -36,7 +36,6 @@ type Current {
     password: String
     picture: String!
     providers: [Provider!]!
-    refreshToken: String
     updatedAt: String!
     username: String
 }
@@ -112,21 +111,30 @@ type Mutation {
     commentPost(post: String!, text: String!): Comment!
     createConversation(infoConversation: CreateConversation!): Boolean
     createPost(post: CreatePost!): Post!
-    createUser(createInput: CreateInput!): User
+    createUser(createUserInput: CreateUser!): User
     deleteComment(id: ID!): Comment!
     deleteEntireUser: DeleteResult
     deletePost(post: DeletePost!): Post
-    deleteUser(userInput: UserInput!): User
+    deleteUser(deleteUserInput: DeleteUser!): User
     likePost(post: String!): Like
     login(loginInput: LoginInput!): User
-    register(createInput: CreateInput!): User!
+    register(createUserInput: CreateUser!): User!
     rejectRequest(request: InfoRequest!): Request
     sendFiles(files: [Upload!]!, payload: SendFiles!): Message
     sendMessage(payload: Send!): Message
-    softDeleteUser(userInput: UserInput!): User
+    softDeleteUser(deleteUserInput: DeleteUser!): User
     unfriend(friend: Friend!): Float
     unlikePost(post: String!): Float!
     uploadAvatar(file: Upload!, id: String!): File
+}
+
+type Notification {
+    _id: String!
+    body: String!
+    deleteAt: String!
+    isRead: String!
+    profile: [Profile!]!
+    type: String!
 }
 
 type Post {
@@ -151,12 +159,20 @@ type Profile {
     provider: String
 }
 
+type ProfilesCommentedPost {
+    "id post "
+    _id: String!
+    "list profile id unique commented in post"
+    profiles: [String!]!
+}
+
 type Provider {
     id: String
     type: String!
 }
 
 type Query {
+    getAllNotifications(profile: String!): [Notification!]
     getComments(post: String!): [Comment!]
     getConversationByFriend(friendId: String!, profileId: String!): Conversation
     getConversationById(conversationId: String!): Conversation
@@ -166,10 +182,12 @@ type Query {
     getListFriendNotInConversation(conversationId: String!): ListFriendNotInConversation
     getListUsers: [User!]
     getMessagesByConversationId(payload: PaginationMessages!): MessagesConversation
+    getNotification(id: String!): Notification
     getPosts(payload: GetPosts): [Post!]
     getProfile(profileInput: Obtain!): Profile!
+    getProfilesCommented(post: String!): ProfilesCommentedPost!
     getRequests(request: RetrieveRequest!): [Request!]!
-    getUser(userInput: UserInput!): User
+    getUser(getUserInput: GetUser!): User
     me: Current
     searchUser(searchInput: Search!): [Profile!]!
 }
@@ -198,7 +216,6 @@ type User {
     email: String!
     password: String
     providers: [Provider!]!
-    refreshToken: String
     updatedAt: String!
     username: String
 }
@@ -216,13 +233,6 @@ input CreateConversation {
     name: String!
 }
 
-input CreateInput {
-    email: String
-    password: String
-    provider: ProviderInput!
-    username: String
-}
-
 input CreatePost {
     "content of post"
     content: String
@@ -235,8 +245,21 @@ input CreateRequest {
     userRequest: ID
 }
 
+input CreateUser {
+    email: String!
+    password: String!
+    provider: ProviderInput
+    username: String!
+}
+
 input DeletePost {
     _id: ID
+}
+
+input DeleteUser {
+    _id: String
+    email: String
+    username: String
 }
 
 input Friend {
@@ -246,6 +269,13 @@ input Friend {
 
 input GetPosts {
     _id: String
+}
+
+input GetUser {
+    _id: String
+    email: String
+    provider: ProviderInput
+    username: String
 }
 
 input InfoRequest {
@@ -306,12 +336,4 @@ input Send {
 input SendFiles {
     conversationId: ID!
     now: Float!
-}
-
-input UserInput {
-    _id: String
-    email: String
-    password: String
-    refreshToken: String
-    username: String
 }

@@ -25,6 +25,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 type Props = {
   children: ReactNode;
 };
@@ -52,15 +53,15 @@ const MainLayout = (props: Props) => {
 
   useEffect(() => {
     const [, name] = router.pathname.split('/');
-    if (name === '') dispatch(changePage('home'));
-    else dispatch(changePage(name));
+    if (name === '') dispatch(changePage('home' as any));
+    else dispatch(changePage(name as any));
   });
   useSubscribe('publish/profiles.unfriend', (payload) => {
     const updatedFriend = user.friends.filter((friend) => friend.id !== payload.friendId);
     dispatch(
       update({
         friends: [...updatedFriend],
-      }),
+      } as any),
     );
   });
   const _notifyMessage = (message: string, avatarSender: string) => {
@@ -78,8 +79,6 @@ const MainLayout = (props: Props) => {
       message: payload.message,
       createdAt: payload.createdAt,
     };
-
-    // dispatch(pushMessages([...messages, newMessage]));
 
     if (page !== 'chat' || payload.conversation._id !== currentConversation) {
       _notifyMessage(payload.message, payload.sender.avatar);
@@ -99,14 +98,6 @@ const MainLayout = (props: Props) => {
       } else toast('success', 'A new person has just been invited to a group !');
     }
   });
-
-  // const b64toBlob = (b64Data: string, contentType = '', sliceSize = 512) => {
-  //   const result = fetch(b64Data)
-  //     .then((r) => r.blob())
-  //     .then((blobData) => URL.createObjectURL(blobData));
-  //   return result;
-  //   // alert(b64Data);
-  // };
 
   const bufferToBlob = (buffers, type) => {
     return URL.createObjectURL(new Blob([new Uint8Array(buffers).buffer], { type }));
@@ -196,6 +187,13 @@ const MainLayout = (props: Props) => {
     dispatch(updateRequest([...listRequests, newRequest]));
   });
 
+  useSubscribe('notifications.SEND_NOTIFICATION', (payload) => {
+    // notify(
+    //   'avatar',
+    //   message.length >= 14 ? `Message: ${message.slice(0, 14)}...` : `Message: ${message}`,
+    //   avatarSender,
+    // );
+  });
   useEffect(() => {
     if (data) dispatch(update(data.getProfile));
   }, [data]);

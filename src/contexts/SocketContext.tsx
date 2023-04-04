@@ -6,10 +6,11 @@ import { io, Socket } from 'socket.io-client';
 const getSocket = async () => {
   const session = await getSession();
 
-  const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
+  const socket = io('https://host.docker.internal:2604', {
     query: {
       session: session?.user?._id,
     },
+    secure: true,
   });
 
   socket.on('connect', () => {

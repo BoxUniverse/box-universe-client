@@ -30,4 +30,5 @@ export { default as Textarea } from './Textarea';
 export { default as TooltipWithIcon } from './TooltipWithIcon';
 export { default as Topbar } from './Topbar';
 export { default as WritePost } from './WritePost';
+export { default as LongText } from './LongText';
 // @endindex

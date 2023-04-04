@@ -1,6 +1,7 @@
 export default function attachToken(gssp) {
   return async (context) => {
     const token = context.req.cookies.accessToken;
+    // console.log(token);
 
     const gsspData = await gssp(context); // Run `getServerSideProps` to get page-specific data
 

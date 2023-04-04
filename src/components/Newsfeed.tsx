@@ -52,10 +52,7 @@ const Newsfeed = () => {
         <span>For you</span>
       </div>
 
-      <div
-        className="listPost pb-24 overflow-scroll"
-        onScroll={handleOnScrollNF}
-        style={{ height: '23rem' }}>
+      <div className="listPost pb-24" onScroll={handleOnScrollNF} style={{ height: '23rem' }}>
         {data?.getPosts &&
           posts?.map((post) => {
             continuePost.current = post._id;

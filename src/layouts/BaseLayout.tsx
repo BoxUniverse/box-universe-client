@@ -13,7 +13,7 @@ export const BaseLayout: React.FC<Props> = ({ children }: Props) => {
   const toast = useToast();
   const user: any = useSelector<RootState>((state) => state.userSlice.user as any);
   const dispatch = useDispatch<StoreDispatch>();
-  useSubscribe('publish/notifications.SEND_NOTIFICATION', (payload) => {
+  useSubscribe('publish/notifications.SEND_NOTIFICATION_REQUEST', (payload) => {
     toast(payload.type, payload.message);
     if (payload.type === 'success') {
       const { userReceive } = payload;

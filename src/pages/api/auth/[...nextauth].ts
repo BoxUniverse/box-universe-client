@@ -8,6 +8,7 @@ import { OAUTH } from '@src/graphql';
 import { CookieSerializeOptions } from 'cookie';
 import * as crypto from 'crypto';
 import NextAuth, { NextAuthOptions } from 'next-auth';
+
 export const cookiesOptions: CookieSerializeOptions = {
   sameSite: 'lax',
   secure: true,
@@ -93,6 +94,9 @@ export const authOptions: NextAuthOptions = {
       }
 
       return { ...token };
+    },
+    async redirect({ url, baseUrl }) {
+      return '/';
     },
   },
 };

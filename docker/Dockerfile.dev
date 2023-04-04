@@ -1,8 +1,15 @@
-FROM node:16.18-alpine
+FROM node:16.13 as client-dependencies
 WORKDIR /client
 COPY ./client/package.json .
-RUN yarn config set "strict-ssl" false -g
 RUN yarn install
+
+FROM node:16.13 as box-universe-client
+#RUN apt-get update && apt-get install libnss3-tools -y && curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && chmod +x mkcert-v*-linux-amd64 && cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+#RUN mkcert -install && mkcert localhost host.docker.internal
+WORKDIR /client
 COPY ./client .
+RUN mkdir -p /usr/local/share/ca-certificates/docker
+RUN cp ./rootCA.pem /usr/local/share/ca-certificates/docker/ && update-ca-certificates
+COPY --from=client-dependencies /client/node_modules ./node_modules
 EXPOSE 5000
 CMD [ "yarn",  "dev" ]

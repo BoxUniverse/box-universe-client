@@ -1,13 +1,14 @@
 import { useLazyQuery } from '@apollo/client';
-import { MessageReceiver, MessageSender } from '@components';
+import { AlwaysScrollToBottom, MessageReceiver, MessageSender } from '@components';
 import { pushMessages } from '@features/user/messageSlice';
 import { useSubscribe } from '@hooks';
 import { GET_MESSAGES_BY_CONVERSATION_ID } from '@queries';
 import { RootState, StoreDispatch } from '@stores/app';
-import { isEmpty } from 'lodash';
+import { first, isEmpty, last, uniq, uniqueId } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTimeout } from 'timers';
+import { MessageGroupTime } from '@src/components/MessageGroupTime';
 
 type Props = {
   data: any;
@@ -68,8 +69,6 @@ const BoxChat = ({ data, isSend, setSend }: Props) => {
 
   useEffect(() => {
     if (oldMessages?.getMessagesByConversationId) {
-      //
-
       const listOldMessages = oldMessages.getMessagesByConversationId.messages;
 
       const newMessages = [...listOldMessages, ...messages];
@@ -126,6 +125,50 @@ const BoxChat = ({ data, isSend, setSend }: Props) => {
     }
   };
 
+  const handleMessages = (messages: Array<any>) => {
+    const firstMessage = first(messages);
+    const resultListMessage = [];
+    // const messageGroupByTime = [
+    //   {
+    //     time: 123892713,
+    //     messages: [],
+    //   },
+    //
+    //   {
+    //     time: 123892713,
+    //     messages: [],
+    //   },
+    // ];
+
+    const messageGroupByTime: Array<{
+      time: string | number;
+      messages: Array<any>;
+      id: any;
+    }> = [];
+
+    messageGroupByTime.push({
+      time: firstMessage?.createdAt,
+      messages: [firstMessage],
+      id: uniqueId('firstMessage'),
+    });
+    // console.log(firstMessage);
+    messages.forEach((message, index) => {
+      if (index === 0) return;
+      if (+message.createdAt - +last(messageGroupByTime).time <= 120000) {
+        last(messageGroupByTime).messages.push(message);
+      } else {
+        messageGroupByTime.push({
+          time: message.createdAt,
+          messages: [message],
+          id: uniqueId('groupTime'),
+        });
+      }
+    });
+    return messageGroupByTime.map((group) => {
+      return <MessageGroupTime key={group.time} group={group} />;
+    });
+  };
+
   useEffect(() => {
     if (result) {
       const fetchedMessage = result.getMessagesByConversationId?.messages || [];
@@ -141,13 +184,7 @@ const BoxChat = ({ data, isSend, setSend }: Props) => {
       className="content-box-chat h-full pt-3 overflow-scroll sm: "
       onScroll={handleScrollToStart}
       ref={boxChatRef}>
-      {messages &&
-        messages?.map((message) => {
-          if (message.sender.id !== user.id)
-            return <MessageReceiver key={`receiver_${message._id}`} info={message} />;
-
-          return <MessageSender key={`sender_${message._id}`} info={message} />;
-        })}
+      {messages && handleMessages(messages)}
       <div ref={messagesEndRef} />
     </div>
   );
