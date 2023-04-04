@@ -90,7 +90,7 @@ const Register: NextPageWithLayout = () => {
     const { username, password, email } = data;
     registerMutation({
       variables: {
-        createInput: {
+        createUserInput: {
           username,
           password,
           email,

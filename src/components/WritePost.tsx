@@ -58,6 +58,7 @@ const WritePost = () => {
         if (showIcon) setShowIcon(false);
       }
     }
+
     document.addEventListener('mousedown', detectClickOutside);
     return () => {
       document.removeEventListener('mousedown', detectClickOutside);

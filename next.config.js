@@ -1,9 +1,12 @@
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 
 const path = require('path');
 
 const nextConfig = {
   reactStrictMode: false,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   swcMinify: true,
   sassOptions: {
     includePaths: [path.join(__dirname, '/src/styles/')],

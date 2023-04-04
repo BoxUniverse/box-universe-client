@@ -1,4 +1,6 @@
 import { Avatar } from '@mui/material';
+import { LongText } from '@src/components';
+import React from 'react';
 
 type Props = {
   comment: any;
@@ -6,7 +8,7 @@ type Props = {
 
 const Comment = ({ comment }: Props) => {
   return (
-    <div className={`flex flex-row gap-5 justify-start items-start mb-10`}>
+    <div className={`flex flex-row gap-5 justify-start items-start mb-10 last:mb-10`}>
       <Avatar
         src={comment.profile.avatar}
         variant="rounded"
@@ -14,9 +16,11 @@ const Comment = ({ comment }: Props) => {
       />
       <div className="message text-white flex flex-col flex-wrap">
         <div className="font-bold">{comment.profile.name}</div>
-        <div className="break-words break-all">{comment.text}</div>
+        <div className="break-words break-all">
+          <LongText>{comment.text}</LongText>
+        </div>
       </div>
     </div>
   );
 };
-export default Comment;
+export default React.memo(Comment);

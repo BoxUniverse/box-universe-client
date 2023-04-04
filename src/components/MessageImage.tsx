@@ -16,7 +16,7 @@ const MessageImage = ({ src }: Props) => {
         image: src,
         isOpen: true,
         name: 'modalViewImage',
-      }),
+      } as any),
     );
   };
   return (

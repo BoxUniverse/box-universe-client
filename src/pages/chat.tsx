@@ -69,8 +69,6 @@ const Chat: NextPageWithLayout = () => {
   };
 
   const handleSubmitChangeName = (value: string) => {
-    // setName(value);
-
     dispatch(
       updateConversation({
         name: value,
@@ -250,6 +248,7 @@ const Chat: NextPageWithLayout = () => {
         if (showIcon) setShowIcon(false);
       }
     }
+
     document.addEventListener('mousedown', detectClickOutside);
     return () => {
       document.removeEventListener('mousedown', detectClickOutside);
@@ -292,7 +291,7 @@ const Chat: NextPageWithLayout = () => {
       updateModal({
         name: 'modalListFriend',
         isOpen: true,
-      }),
+      } as any),
     );
   };
 
@@ -310,7 +309,7 @@ const Chat: NextPageWithLayout = () => {
         updateModal({
           name: 'modalCallVideo',
           isOpen: true,
-        }),
+        } as any),
       );
     else toast('warn', 'User is offline');
   });

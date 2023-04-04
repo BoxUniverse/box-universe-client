@@ -51,7 +51,7 @@ const Request = ({ data }: Props) => {
   };
   useEffect(() => {
     if (aData) {
-      publish('subscribe/notifications.SEND_NOTIFICATION', {
+      publish('subscribe/notifications.SEND_NOTIFICATION_REQUEST', {
         request: { ...aData.acceptRequest, type: 'accepted' },
       });
       const { userRequest } = aData.acceptRequest;
@@ -71,7 +71,7 @@ const Request = ({ data }: Props) => {
     }
   }, [aData]);
   if (rData) {
-    publish('subscribe/notifications.SEND_NOTIFICATION', {
+    publish('subscribe/notifications.SEND_NOTIFICATION_REQUEST', {
       request: { ...rData.rejectRequest, type: 'rejected' },
     });
     // publish('subscribe/notifications.SEND_NOTIFICATION', { ...aData });

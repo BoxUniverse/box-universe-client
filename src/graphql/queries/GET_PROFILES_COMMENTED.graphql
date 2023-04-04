@@ -1,0 +1,6 @@
+query getProfilesCommented($post: String!) {
+    getProfilesCommented(post: $post) {
+        _id
+        profiles
+    }
+}

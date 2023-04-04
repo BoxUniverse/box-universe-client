@@ -48,12 +48,6 @@ const Login: NextPageWithLayout = () => {
       });
       const error = response?.error;
 
-      // if (user) {
-      //
-      //
-      //   socket.emit('login', 'Sdsdsd');
-      // }
-
       if (error) return Promise.reject(new Error('Unauthorizied'));
     } catch (error) {
       return Promise.reject(new Error('Unauthorized'));
@@ -241,7 +235,7 @@ const Login: NextPageWithLayout = () => {
                 <Image
                   className="cursor-pointer"
                   onClick={() => {
-                    signIn('facebook');
+                    void signIn('facebook');
                   }}
                   src={FacebookLogo}
                   alt="logo-facebook"
@@ -253,7 +247,7 @@ const Login: NextPageWithLayout = () => {
                 <Image
                   className="cursor-pointer"
                   onClick={() => {
-                    signIn('google');
+                    void signIn('google');
                   }}
                   src={GoogleLogo}
                   alt="logo-google"
@@ -265,7 +259,7 @@ const Login: NextPageWithLayout = () => {
                 <Image
                   className="cursor-pointer"
                   onClick={() => {
-                    signIn('discord');
+                    void signIn('discord');
                   }}
                   src={DiscordLogo}
                   alt="logo-discord"
@@ -277,7 +271,7 @@ const Login: NextPageWithLayout = () => {
                 <Image
                   className="cursor-pointer"
                   onClick={() => {
-                    signIn('github');
+                    void signIn('github');
                   }}
                   src={GithubLogo}
                   alt="logo-github"
