@@ -10,16 +10,17 @@ import { IoSearch } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 
 export const ModalListFriendConversation = () => {
-  const { modalListFriend }: any = useSelector<RootState>((state) => state.modalSlice);
+  const { modalListFriendConversation }: any = useSelector<RootState>((state) => state.modalSlice);
   const inputRef = useRef<string>('');
+  const [addMemberConversation] = useMutation(ADD_MEMBER_CONVERSATION);
   const user: any = useSelector<RootState>((state) => state.userSlice.user as any);
   const [friends, setFriends] = useState([]);
+  const publish = usePublish();
 
   const { currentConversation }: any = useSelector<RootState>(
     (state) => state.conversationSlice as any,
   );
 
-  // TODO: CHANGE QUERY
   const [getListFriend, { data }] = useLazyQuery(GET_LIST_FRIEND_NOT_IN_CONVERSATION, {
     variables: {
       conversationId: currentConversation,
@@ -27,10 +28,10 @@ export const ModalListFriendConversation = () => {
   });
 
   useEffect(() => {
-    if (modalListFriend.isOpen) {
+    if (modalListFriendConversation.isOpen) {
       getListFriend();
     }
-  }, [modalListFriend.isOpen, getListFriend]);
+  }, [modalListFriendConversation.isOpen, getListFriend]);
   useEffect(() => {
     if (data?.getListFriendNotInConversation?.result) {
       setFriends(data.getListFriendNotInConversation.result);
@@ -41,14 +42,32 @@ export const ModalListFriendConversation = () => {
     inputRef.current = event.target.value;
   };
 
-  if (modalListFriend.isOpen) {
+  const handleAddFriendConversation = (profileId: string) => {
+    const newFriends = friends.filter((friend) => friend.id !== profileId);
+
+    setFriends([...newFriends]);
+    addMemberConversation({
+      variables: {
+        conversationId: currentConversation,
+        profileIds: [profileId],
+      },
+    });
+
+    publish('conversation.addMember', {
+      conversationId: currentConversation,
+      profileId: profileId,
+      invitorId: user.id,
+    });
+  };
+
+  if (modalListFriendConversation.isOpen) {
     return (
       <Modal
         name="modalListFriend"
         width="md:w-4/6 w-full"
         height="md:h-5/6 h-screen"
         closeable={true}
-        title={'FRIEND'}
+        title={'ADD FRIEND TO CONVERSATION'}
         overlay={true}
         style={{ zIndex: 9999, backgroundColor: '#000000a3' }}>
         <div className=" rounded-2xl  w-fit h-full text-white flex justify-center opacity-100 p-10">
@@ -64,7 +83,9 @@ export const ModalListFriendConversation = () => {
               icons={<IoSearch />}
               border="white"
             />
-            <span className="uppercase pb-2 border-b-white border-b-2 w-fit ">friends</span>
+            <span className="uppercase pb-2 border-b-white border-b-2 w-fit ">
+              list your friend
+            </span>
             {friends &&
               friends.map((profile) => {
                 return (
@@ -73,6 +94,14 @@ export const ModalListFriendConversation = () => {
                     className="flex flex-row items-center justify-center gap-5  hover:bg-purple-500 py-2 rounded transition duration-200">
                     <Avatar src={profile.avatar} />
                     <span className="text-white">{profile.name}</span>
+
+                    <AiOutlineUsergroupAdd
+                      className="ml-10 cursor-pointer"
+                      size={30}
+                      onClick={() => {
+                        handleAddFriendConversation(profile.id);
+                      }}
+                    />
                   </div>
                 );
               })}

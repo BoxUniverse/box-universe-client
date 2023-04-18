@@ -6,7 +6,17 @@ type ModalState = {
     image: StaticImageData;
     isOpen: boolean;
   };
+  modalListFriendConversation: {
+    isOpen: boolean;
+  };
+
   modalListFriend: {
+    isOpen: boolean;
+  };
+  modalListRequest: {
+    isOpen: boolean;
+  };
+  modalListConversation: {
     isOpen: boolean;
   };
   modalCallVideo: {
@@ -25,7 +35,15 @@ const initialState = {
     image: null,
     isOpen: false,
   },
+  modalListFriendConversation: {
+    isOpen: false,
+  },
+
   modalListFriend: {
+    isOpen: false,
+  },
+
+  modalListRequest: {
     isOpen: false,
   },
   modalCallVideo: {

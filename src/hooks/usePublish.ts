@@ -3,8 +3,8 @@ import { useSocket } from '@contexts';
 type OptionsNotification = {
   notificationName?: string;
   payloadNotification?: any;
-  eventName: string;
-  payloadPublish: string;
+  // eventName: string;
+  // payloadPublish: string;
 };
 
 // WARNING: subscribe multiple event

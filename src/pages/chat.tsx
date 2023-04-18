@@ -321,13 +321,13 @@ const Chat: NextPageWithLayout = () => {
       <Head>
         <title>Chat</title>
       </Head>
-      <div className="w-full relative h-full ">
+      <div className="w-full relative h-5/6 sm:h-full ">
         <div className="header__box sticky top-3/6 z-40 flex items-center h-11 justify-between border-spacing-20 border-b border-b-purple-500 pb-3 ">
           <div className="flex items-center">
             <Avatar alt="Remy Sharp" src={avatar} />
-            <span className="ml-5 text-xl">{conversation.name}</span>
+            <span className="ml-5 sm:text-sm md:text-lg  xs:text-sm">{conversation.name}</span>
           </div>
-          <div className="settings-chat absolute right-0 h-6 w-6 group after:content-['']  after:absolute after:top-5 after:right-0 after:w-36 after:h-7">
+          <div className="settings-chat absolute right-0 h-6 w-6 group after:content-[''] hidden xs:block after:absolute after:top-5 after:right-0 after:w-36 after:h-7">
             <IoEllipsisVerticalOutline className="absolute cursor-pointer " size={25} />
             <ul className="dropdown-settings absolute top-12 group-hover:flex hover:flex hidden right-0 rounded-md border border-purple-500  backdrop-blur-sm w-60 items-center flex-col child">
               <li
@@ -375,7 +375,7 @@ const Chat: NextPageWithLayout = () => {
           </div>
         </div>
 
-        <div className="h-5/6">
+        <div className="h-5/6 pb-2 sm:pb-0">
           {conversation?.currentConversation && (
             <BoxChat
               data={conversationData?.getConversationById}

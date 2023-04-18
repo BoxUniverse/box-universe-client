@@ -177,57 +177,39 @@ const ProfileInformation = ({ data, me }: Props) => {
         </Tooltip>
       </div>
 
-      <div className="divider h-0.5 mt-5 text-purple-500 bg-purple-500 w-full"></div>
-      <div className="form-information pt-5 [&>div.group-form]:pb-5">
-        <div className="group-form flex flex-col justify-center">
+      <div className="divider h-0.5 mt-5 text-purple-500 bg-purple-500 w-full hidden sm:block "></div>
+      <div className="form-information mt-10  sm:mt-0 pt-5 [&>div.group-form]:pb-5 w-full flex flex-col justify-center items-center 2xl:w-4/12">
+        <div className="group-form flex flex-col justify-center gap-2">
           <label className="uppercase">name</label>
           <Input
             border="purple"
             value={data.name}
-            width="w-full"
+            width="w-72"
             height="h-12"
             disabled
-            icons={
-              <IoPersonOutline
-                color="white"
-                className="absolute top-1/2 transform -translate-y-1/2 ml-3 "
-                size={20}
-              />
-            }
+            icons={<IoPersonOutline color="white" size={20} />}
           />
         </div>
-        <div className="group-form flex flex-col justify-center">
+        <div className="group-form flex flex-col justify-center gap-2">
           <label className="uppercase">email</label>
           <Input
             border="purple"
             value={data.email}
-            width="w-full"
+            width="w-72"
             height="h-12"
             disabled
-            icons={
-              <IoMailOutline
-                color="white"
-                className="absolute top-1/2 transform -translate-y-1/2 ml-3 "
-                size={20}
-              />
-            }
+            icons={<IoMailOutline color="white" size={20} />}
           />
         </div>
-        <div className="group-form flex flex-col justify-center">
+        <div className="group-form flex flex-col justify-center gap-2">
           <label className="uppercase">Phone number</label>
           <Input
             border="purple"
             value={data.email}
-            width="w-full"
+            width="w-72"
             height="h-12"
             disabled
-            icons={
-              <IoCallOutline
-                color="white"
-                className="absolute top-1/2 transform -translate-y-1/2 ml-3 "
-                size={20}
-              />
-            }
+            icons={<IoCallOutline color="white" size={20} />}
           />
         </div>
       </div>

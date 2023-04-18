@@ -48,7 +48,7 @@ const Newsfeed = () => {
   };
   return (
     <div className="mt-10">
-      <div className="mb-10 uppercase text-xl border-b pb-3  w-24 whitespace-nowrap">
+      <div className="mb-10 uppercase text-xl border-b pb-3  w-24 whitespace-nowrap font-semibold">
         <span>For you</span>
       </div>
 

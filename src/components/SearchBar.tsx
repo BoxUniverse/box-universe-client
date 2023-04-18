@@ -34,7 +34,7 @@ export const SearchBar = () => {
     }
   };
   return (
-    <div className="searchBar relative w-fit flex items-center ">
+    <div className="searchBar relative w-fit hidden md:flex items-center ">
       <div className="relative">
         <input
           ref={inputSearchRef}
@@ -51,7 +51,7 @@ export const SearchBar = () => {
         />
         <IoSearchOutline
           color="white"
-          className="absolute top-1/2 transform -translate-y-1/2 ml-3 "
+          className="absolute top-1/2 transform -translate-y-1/2 ml-3"
           size={20}
         />
         {keyword.length >= 4 && isFocus && listUser?.length > 0 && (

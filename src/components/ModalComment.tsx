@@ -29,7 +29,10 @@ const ModalComment = () => {
   });
 
   useEffect(() => {
-    if (commentAdded) setComments((prev) => [...prev, commentAdded.commentAdded]);
+    if (commentAdded) {
+      console.log(commentAdded);
+      setComments((prev) => [...prev, commentAdded.commentAdded]);
+    }
   }, [commentAdded]);
 
   useEffect(() => {
@@ -43,8 +46,11 @@ const ModalComment = () => {
       const { post } = modalComment;
       notify('notifications.SEND_NOTIFICATION', {
         type: 'newsfeed',
-        post: post._id,
-        message: `${user.name} has just commented to ${post.profile.name}'s post `,
+        message: {
+          userAction: user.name,
+          post: post._id,
+        },
+        action: 'comment',
       });
     }
   }, [resultComment]);
@@ -63,8 +69,8 @@ const ModalComment = () => {
   if (modalComment.isOpen) {
     return (
       <Modal
-        width="w-4/6"
-        height="h-5/6"
+        width="md:w-4/6 w-full"
+        height="md:h-5/6 h-screen"
         name="modalComment"
         closeable={true}
         title={`${post.profile.name}'s post`}>
@@ -91,7 +97,7 @@ const ModalComment = () => {
               <span> Comments ({comments?.length || 0})</span>
             </div>
             <div className="h-fit">
-              <div className="comments mt-5 h-auto ml-10" ref={boxCommentRef}>
+              <div className="comments mt-5 h-auto ml-0 md:ml-10" ref={boxCommentRef}>
                 {comments?.slice(0, 10).map((comment) => {
                   continueComment.current = comment._id;
                   return <Comment key={comment._id} comment={comment} />;

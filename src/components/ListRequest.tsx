@@ -56,7 +56,7 @@ const ListRequest = () => {
   //
   // }
   return (
-    <div className="fixed top-1/6 right-3 z-30 ml-24 h-3/6 px-3 backdrop-blur-md  rounded-xl hidden lg:block">
+    <div className="fixed top-1/6 right-3 z-30 ml-24 h-3/6 px-3 backdrop-blur-md max-w-sm  rounded-xl hidden xl:block">
       <div className="ml-2">
         <div className="uppercase text-xl border-b pb-3  w-24 whitespace-nowrap h-11">
           <span className="text-white">Request</span>

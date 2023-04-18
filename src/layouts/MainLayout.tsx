@@ -5,7 +5,10 @@ import {
   ListRequest,
   ModalCallVideo,
   ModalComment,
+  ModalListConversation,
   ModalListFriend,
+  ModalListFriendConversation,
+  ModalListRequest,
   ModalViewImage,
   Sidebar,
   Topbar,
@@ -41,8 +44,15 @@ const MainLayout = (props: Props) => {
     (state) => state.conversationSlice as any,
   );
 
-  const { modalViewImage, modalListFriend, modalCallVideo, modalComment }: any =
-    useSelector<RootState>((state) => state.modalSlice as any);
+  const {
+    modalViewImage,
+    modalListFriend,
+    modalCallVideo,
+    modalComment,
+    modalListConversation,
+    modalListFriendConversation,
+    modalListRequest,
+  }: any = useSelector<RootState>((state) => state.modalSlice as any);
   const { children } = props;
 
   const toast = useToast();
@@ -188,11 +198,15 @@ const MainLayout = (props: Props) => {
   });
 
   useSubscribe('notifications.SEND_NOTIFICATION', (payload) => {
-    // notify(
-    //   'avatar',
-    //   message.length >= 14 ? `Message: ${message.slice(0, 14)}...` : `Message: ${message}`,
-    //   avatarSender,
-    // );
+    if (payload.type === 'newsfeed') {
+      let message;
+      if (user.name === payload.message.postUser) {
+        message = `${payload.message.userComment} has just commented to your post`;
+      } else {
+        message = `${payload.message.userComment} has just commented to ${payload.message.postUser} post `;
+      }
+      notify('avatar', `${message}`, null);
+    }
   });
   useEffect(() => {
     if (data) dispatch(update(data.getProfile));
@@ -202,8 +216,11 @@ const MainLayout = (props: Props) => {
     <>
       {modalViewImage.isOpen && <ModalViewImage />}
       {modalListFriend.isOpen && <ModalListFriend />}
+      {modalListFriendConversation.isOpen && <ModalListFriendConversation />}
+      {modalListRequest.isOpen && <ModalListRequest />}
       {modalComment.isOpen && <ModalComment />}
       {modalCallVideo.isOpen && <ModalCallVideo />}
+      {modalListConversation?.isOpen && <ModalListConversation />}
 
       <BaseLayout>
         <Image
@@ -219,13 +236,31 @@ const MainLayout = (props: Props) => {
           {page === 'home' && <ListFriend />}
           {page === 'profile' && <ListFriend />}
           {page === 'chat' && <ListFriendChat />}
-          <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
-            <div className="ml-24  h-full mt-0 flex flex-row">
-              <div className="w-full flex justify-center relative">
-                <div className="w-7/12">{children}</div>
+
+          {page === 'chat' && (
+            <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
+              <div className="sm:ml-24  h-full mt-0 flex flex-row">
+                <div className="w-full flex xs:justify-center sm:justify-end md:justify-end  2xl:justify-end s:mr-0  md:mr-5">
+                  <div className=" s:w-full xs:w-[calc(100%)] sm:w-[calc(100%-8rem)] xl:w-[calc(100%-20rem)] px-5 md:px-0">
+                    {children}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {page !== 'chat' && (
+            <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
+              <div className="sm:ml-24  h-full mt-0 flex flex-row">
+                <div className="w-full flex md:ml-0 xs:justify-center sm:justify-end md:justify-end  xl:justify-center md:px-5 xs:px-2 px-1  relative ">
+                  <div className="s:w-full xs:w-[calc(100%)] sm:w-[calc(100%-8rem)]  xl:w-[calc(100%-44rem)] ">
+                    {children}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {page === 'home' && <ListRequest />}
           {page === 'profile' && <ListRequest />}
         </div>

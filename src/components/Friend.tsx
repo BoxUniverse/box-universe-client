@@ -32,7 +32,7 @@ const Friend = ({ info }: Props) => {
   };
 
   return (
-    <div className="friend mt-7 mb-3 flex flex-row items-center text-white">
+    <div className="friend mt-7 mb-3 flex flex-row items-center text-white justify-center xl:justify-start">
       <Badge
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -41,25 +41,25 @@ const Friend = ({ info }: Props) => {
         <Avatar alt="Remy Sharp" src={info.avatar} />
       </Badge>
       <div
-        className="text-white ml-5 w-32 whitespace-nowrap overflow-hidden cursor-pointer "
+        className="text-white ml-5 w-24 whitespace-nowrap cursor-pointer text-sm hidden xl:block"
         onClick={seeProfile}>
-        {info?.name?.length > 10 ? `${info.name.slice(0, 10)} .............` : info?.name}
+        {info?.name?.length >= 27 ? `${info.name.slice(0, 27)}` : info?.name}
       </div>
-      <div className="relative" onClick={chatWith}>
-        <IoChatbubbleEllipsesOutline size={25} className="text-purple-500 ml-10 cursor-pointer" />
-        <IoChatbubbleEllipsesOutline
-          size={25}
-          className="text-purple-500 ml-10 cursor-pointer absolute blur-sm top-0"
-        />
-      </div>
+      {/*<div className="relative" onClick={chatWith}>*/}
+      {/*  <IoChatbubbleEllipsesOutline size={25} className="text-purple-500 ml-10 cursor-pointer" />*/}
+      {/*  <IoChatbubbleEllipsesOutline*/}
+      {/*    size={25}*/}
+      {/*    className="text-purple-500 ml-10 cursor-pointer absolute blur-sm top-0"*/}
+      {/*  />*/}
+      {/*</div>*/}
 
-      <div className="relative">
-        <IoBanOutline size={25} className="text-red-500 ml-3 cursor-pointer" />
-        <IoBanOutline
-          size={25}
-          className="text-red-500 ml-3 cursor-pointer absolute blur-sm top-0"
-        />
-      </div>
+      {/*<div className="relative">*/}
+      {/*  <IoBanOutline size={25} className="text-red-500 ml-3 cursor-pointer" />*/}
+      {/*  <IoBanOutline*/}
+      {/*    size={25}*/}
+      {/*    className="text-red-500 ml-3 cursor-pointer absolute blur-sm top-0"*/}
+      {/*  />*/}
+      {/*</div>*/}
     </div>
   );
 };

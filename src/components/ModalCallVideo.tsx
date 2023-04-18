@@ -34,7 +34,7 @@ const ModalCallVideo = () => {
   });
 
   useSubscribe('receiver.REJECT_CALL', () => {
-    dispatch(closeModal({ name: 'modalCallVideo' }));
+    dispatch(closeModal({ name: 'modalCallVideo' } as any));
     toast('warn', 'Receiver rejected the call');
   });
 
@@ -58,6 +58,7 @@ const ModalCallVideo = () => {
     });
 
     peer.on('signal', (data) => {
+      alert('x');
       publish('messages.CALL', {
         conversation: currentConversation,
         signalData: data,
@@ -82,7 +83,8 @@ const ModalCallVideo = () => {
       updateModal({
         isOpen: false,
         receiverAccept: false,
-      }),
+        name: 'modalCallVideo',
+      } as any),
     );
     toast('warn', 'User is offline');
   });
@@ -119,7 +121,7 @@ const ModalCallVideo = () => {
         isOpen: false,
         receiverAccept: false,
         name: 'modalCallVideo',
-      }),
+      } as any),
     );
   });
 
@@ -156,7 +158,7 @@ const ModalCallVideo = () => {
             isOpen: true,
             receiverAccept: true,
             name: 'modalCallVideo',
-          }),
+          } as any),
         );
         const stm = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         userVideo.current.srcObject = stm;
@@ -203,7 +205,7 @@ const ModalCallVideo = () => {
           updateModal({
             isOpen: false,
             name: 'modalCallVideo',
-          }),
+          } as any),
         );
       }
     });
@@ -216,7 +218,7 @@ const ModalCallVideo = () => {
         isOpen: false,
         receiverAccept: false,
         name: 'modalCallVideo',
-      }),
+      } as any),
     );
     partnerVideo.current?.srcObject?.getTracks().forEach((track) => track.stop());
     userVideo.current?.srcObject?.getTracks().forEach((track) => track.stop());
@@ -239,7 +241,7 @@ const ModalCallVideo = () => {
         isOpen: false,
         name: 'modalCallVideo',
         receiverAccept: false,
-      }),
+      } as any),
     );
   };
 

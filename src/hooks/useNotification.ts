@@ -3,6 +3,7 @@ import { useSocket } from '@contexts';
 type RequiredPayloadNotification = {
   type: 'newsfeed' | 'message';
   message: any;
+  action: string;
 };
 type ReceiverNotification = 'post' | 'conversation';
 type PayloadNotification = Required<RequiredPayloadNotification> &

@@ -46,19 +46,14 @@ const ListFriendChat = () => {
     conversationsData = conversations.getConversationByProfileId;
   }
 
-  // useEffect(() => {
-  //   if (conversation) {
-  //
-  //   }
-  // }, [conversation]);
   return (
-    <div className="fixed bottom-1 w-1/5  z-30 ml-24 h-5/6 px-3 backdrop-blur-md  rounded-xl hidden md:block max-w-xs">
-      <div className="mt-1 ml-2">
-        <div className="uppercase text-xl border-b pb-3  w-24 whitespace-nowrap h-11">
-          <span className="text-white">FRIENDS</span>
+    <div className="fixed bottom-1 xs:hidden sm:w-24 sm:flex sm:justify-center sm:flex-col sm:items-center xl:block  xl:w-72 w-fit z-30 ml-24 h-5/6 px-1 backdrop-blur-md  rounded-xl hidden">
+      <div className="xl:mt-1 xl:ml-2">
+        <div className="uppercase text-xl border-b pb-3  w-fit sm:text-sm md:text-md xl:text-xl xl:w-24 whitespace-nowrap h-11">
+          <span className="text-white">Conversations</span>
         </div>
       </div>
-      <div className="list-friends overflow-scroll mt-2 " style={{ height: '91.5%' }}>
+      <div className="list-friends overflow-scroll mt-2 flex flex-col " style={{ height: '91.5%' }}>
         {conversationsData?.map((conversation) => (
           <Conversation
             info={conversation}

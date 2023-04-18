@@ -6,6 +6,7 @@ import {
   IoWarningOutline,
 } from 'react-icons/io5';
 import { toast, ToastOptions } from 'react-toastify';
+import { width } from '@mui/system';
 
 const useToast = (options: ToastOptions = {}) => {
   const icons = {

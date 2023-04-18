@@ -19,6 +19,7 @@ export { default as Modal } from './Modal';
 export { default as ModalCallVideo } from './ModalCallVideo';
 export { default as ModalComment } from './ModalComment';
 export { default as ModalListFriend } from './ModalListFriend';
+export { default as ModalListRequest } from './ModalListRequest';
 export { default as ModalViewImage } from './ModalViewImage';
 export { default as Newsfeed } from './Newsfeed';
 export { default as Post } from './Post';
@@ -31,4 +32,7 @@ export { default as TooltipWithIcon } from './TooltipWithIcon';
 export { default as Topbar } from './Topbar';
 export { default as WritePost } from './WritePost';
 export { default as LongText } from './LongText';
+export { default as BottomBar } from './BottomBar';
+export { default as ModalListConversation } from './ModalListConversation';
+export { default as ModalListFriendConversation } from './ModalListFriendConversation';
 // @endindex

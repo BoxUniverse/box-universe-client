@@ -36,7 +36,7 @@ const Input: React.FC<Props> = ({ icons, value, height, width, border, onEnter, 
           name="detail__email"
           id="detail__email"
           ref={inputRef}
-          className={`will-change-scrollwhitespace-nowrap placeholder:select-none neon text-lg align-middle placeholder:text-sm placeholder:uppercase bg-transparent rounded-lg focus: outline-0  pl-10 pr-2 border-${border}-500 ${width} ${height}`}
+          className={`will-change-scroll whitespace-nowrap placeholder:select-none neon text-lg align-middle placeholder:text-sm placeholder:uppercase bg-transparent rounded-lg focus: outline-0  pl-10 pr-2 border-${border}-500 ${width} ${height}`}
           onChange={handleOnChangeInput}
           {...props}
           onKeyUp={handleOnEnter}

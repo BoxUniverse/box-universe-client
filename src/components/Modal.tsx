@@ -11,8 +11,8 @@ type State = {
   style?: React.CSSProperties;
   afterClose?: () => void;
   closeable?: boolean;
-  width?: Width;
-  height?: Height;
+  width?: string;
+  height?: string;
   overlay?: boolean;
   title?: string;
 };
@@ -57,7 +57,7 @@ const Modal = ({
     };
   }, [handlePressEsc]);
   return (
-    <>
+    <div>
       {overlay && (
         <div className={'fixed backdrop-blur-lg w-full h-full'} style={{ zIndex: 999 }}></div>
       )}
@@ -66,8 +66,8 @@ const Modal = ({
         className={
           className ||
           `${width || 'w-full'} ${
-            height || 'h-full'
-          } top-1/2 rounded-2xl border border-gray-500 left-1/2 -translate-x-1/2 -translate-y-1/2 fixed backdrop-blur-2xl flex flex-col items-center justify-center`
+            height || 'h-screen'
+          } top-1/2 rounded-2xl border border-gray-500 left-1/2 -translate-x-1/2 -translate-y-1/2 fixed backdrop-blur-2xl flex flex-col items-center justify-center `
         }
         style={style || { zIndex: 999, backgroundColor: '#000000a3' }}>
         {closeable && (
@@ -88,7 +88,7 @@ const Modal = ({
         )}
         {children}
       </div>
-    </>
+    </div>
   );
 };
 export default Modal;

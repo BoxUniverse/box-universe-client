@@ -66,7 +66,7 @@ const WritePost = () => {
   });
   return (
     <div>
-      <div className="mb-10 uppercase text-xl border-b pb-3 w-24 whitespace-nowrap">
+      <div className="mb-10 uppercase text-xl border-b pb-3 w-24 whitespace-nowrap font-semibold">
         <span>Update your activity</span>
       </div>
       <div className="relative">
@@ -113,7 +113,9 @@ const WritePost = () => {
         className="mt-3 flex justify-center items-center bg-purple-500 w-full h-10 rounded-md cursor-pointer"
         onClick={handlePost}>
         <input type="file" id="image" name="image" />
-        <button type="button">POST</button>
+        <button type="button" className={'font-medium'}>
+          POST
+        </button>
       </div>
     </div>
   );

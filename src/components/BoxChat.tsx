@@ -181,7 +181,7 @@ const BoxChat = ({ data, isSend, setSend }: Props) => {
 
   return (
     <div
-      className="content-box-chat h-full pt-3 overflow-scroll sm: "
+      className="content-box-chat h-full pt-3 overflow-scroll "
       onScroll={handleScrollToStart}
       ref={boxChatRef}>
       {messages && handleMessages(messages)}

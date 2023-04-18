@@ -104,17 +104,17 @@ const Request = ({ data }: Props) => {
           {data.userRequest.name}
         </Link>
         <div className="relative" onClick={handleAcceptRequest}>
-          <IoCheckmarkOutline size={25} className="text-green-500 ml-10 cursor-pointer" />
+          <IoCheckmarkOutline size={25} className="text-green-500 ml-1 cursor-pointer" />
           <IoCheckmarkOutline
             size={25}
-            className="text-green-500 ml-10 cursor-pointer absolute blur-sm top-0"
+            className="text-green-500 ml-1 cursor-pointer absolute blur-sm top-0"
           />
         </div>
         <div className="relative" onClick={handleRejectRequest}>
-          <IoCloseOutline size={25} className="text-red-500 ml-3 cursor-pointer" />
+          <IoCloseOutline size={25} className="text-red-500 ml-1 cursor-pointer" />
           <IoCloseOutline
             size={25}
-            className="text-red-500 ml-3 cursor-pointer absolute blur-sm top-0"
+            className="text-red-500 ml-1 cursor-pointer absolute blur-sm top-0"
           />
         </div>
       </div>

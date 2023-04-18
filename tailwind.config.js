@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 module.exports = {
   important: true,
   mode: 'jit',
@@ -10,6 +10,8 @@ module.exports = {
     },
     extend: {},
     screens: {
+      s: '350px',
+      xs: '435px',
       sm: '640px',
       md: '768px',
       lg: '1024px',
