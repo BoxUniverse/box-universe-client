@@ -20,6 +20,7 @@ type ModalState = {
     isOpen: boolean;
   };
   modalCallVideo: {
+    payload: any;
     isOpen: boolean;
     receiverAccept?: boolean;
   };
@@ -47,6 +48,7 @@ const initialState = {
     isOpen: false,
   },
   modalCallVideo: {
+    payload: null,
     isOpen: false,
     receiverAccept: false,
   },

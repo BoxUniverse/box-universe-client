@@ -196,14 +196,18 @@ const MainLayout = (props: Props) => {
     };
     dispatch(updateRequest([...listRequests, newRequest]));
   });
-
   useSubscribe('notifications.SEND_NOTIFICATION', (payload) => {
     if (payload.type === 'newsfeed') {
+      console.log(payload);
       let message;
-      if (user.name === payload.message.postUser) {
-        message = `${payload.message.userComment} has just commented to your post`;
+      if (user.id === payload.message.userReceive[0]) {
+        message = `${payload.message.userAction.name} has just commented to your post`;
       } else {
-        message = `${payload.message.userComment} has just commented to ${payload.message.postUser} post `;
+        if (payload.message.userAction.name !== payload.message.postAuthorName) {
+          message = `${payload.message.userAction.name} has just commented to ${payload.message.postAuthorName} post `;
+        } else {
+          message = `${payload.message.userAction.name} has just commented to their post `;
+        }
       }
       notify('avatar', `${message}`, null);
     }
@@ -233,9 +237,10 @@ const MainLayout = (props: Props) => {
         <div className="wrapLayout flex h-full w-full">
           <Topbar page={page} />
           <Sidebar page={page} />
-          {page === 'home' && <ListFriend />}
-          {page === 'profile' && <ListFriend />}
-          {page === 'chat' && <ListFriendChat />}
+          {(page === 'chat' ||
+            page === 'home' ||
+            page === 'profile' ||
+            page === 'notifications') && <ListFriend />}
 
           {page === 'chat' && (
             <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
@@ -250,7 +255,9 @@ const MainLayout = (props: Props) => {
           )}
 
           {page !== 'chat' && (
-            <div className="mainContent w-full  text-white h-5/6 absolute bottom-0">
+            <div
+              className="mainContent w-full  text-white h-5/6 absolute bottom-0 "
+              onScroll={() => {}}>
               <div className="sm:ml-24  h-full mt-0 flex flex-row">
                 <div className="w-full flex md:ml-0 xs:justify-center sm:justify-end md:justify-end  xl:justify-center md:px-5 xs:px-2 px-1  relative ">
                   <div className="s:w-full xs:w-[calc(100%)] sm:w-[calc(100%-8rem)]  xl:w-[calc(100%-44rem)] ">
@@ -261,8 +268,7 @@ const MainLayout = (props: Props) => {
             </div>
           )}
 
-          {page === 'home' && <ListRequest />}
-          {page === 'profile' && <ListRequest />}
+          {(page === 'home' || page === 'profile' || page === 'notifications') && <ListRequest />}
         </div>
       </BaseLayout>
     </>

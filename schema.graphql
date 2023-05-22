@@ -130,11 +130,29 @@ type Mutation {
 
 type Notification {
     _id: String!
-    body: String!
-    deleteAt: String!
+    action: String!
+    deletedAt: String
     isRead: String!
-    profile: [Profile!]!
+    message: PayloadMessageNotification!
     type: String!
+}
+
+type NotificationGroup {
+    _id: String!
+    action: String!
+    deletedAt: String
+    groupUserAction: [SimpleProfile!]!
+    isRead: String!
+    post: Post!
+    type: String!
+    userReceive: [String!]!
+}
+
+type PayloadMessageNotification {
+    conversation: String
+    post: String
+    userAction: String!
+    userReceive: [String!]
 }
 
 type Post {
@@ -172,8 +190,7 @@ type Provider {
 }
 
 type Query {
-    getAllNotifications(profile: String!): [Notification!]
-    getComments(post: String!): [Comment!]
+    getComments(payloadPostComment: PaginationComment!): [Comment!]
     getConversationByFriend(friendId: String!, profileId: String!): Conversation
     getConversationById(conversationId: String!): Conversation
     getConversationByProfileId(profileId: String!): [Conversation!]
@@ -183,6 +200,7 @@ type Query {
     getListUsers: [User!]
     getMessagesByConversationId(payload: PaginationMessages!): MessagesConversation
     getNotification(id: String!): Notification
+    getNotifications(profile: String!): [NotificationGroup!]
     getPosts(payload: GetPosts): [Post!]
     getProfile(profileInput: Obtain!): Profile!
     getProfilesCommented(post: String!): ProfilesCommentedPost!
@@ -199,6 +217,13 @@ type Request {
     isReject: Boolean!
     userReceive: Profile!
     userRequest: Profile!
+}
+
+type SimpleProfile {
+    avatar: String!
+    email: String!
+    id: String!
+    name: String!
 }
 
 type Subscription {
@@ -299,6 +324,13 @@ input OAuthInput {
 
 input Obtain {
     id: String!
+}
+
+input PaginationComment {
+    "id post"
+    post: String!
+    "continue id comment"
+    startValue: String
 }
 
 input PaginationMessages {

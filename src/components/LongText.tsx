@@ -17,7 +17,7 @@ const LongText: React.FC<Props> = ({ children, max = 50 }: Props) => {
   };
   return (
     <div>
-      {children.length > max && !isMore ? (
+      {children?.length > max && !isMore ? (
         <>
           {`${text.slice(0, max)}...`}
           <span

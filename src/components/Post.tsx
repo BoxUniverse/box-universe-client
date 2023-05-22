@@ -21,7 +21,7 @@ const Post = ({ post }: Props) => {
   const [like] = useMutation(LIKE_POST);
   const [unlike] = useMutation(UNLIKE_POST);
   const [countLike, setCountLike] = useState(post.countLike);
-  const [countComment, setCountComment] = useState(post.countComment);
+  const [countComment, setCountComment] = useState(post?.countComment || 0);
   const dispatch = useDispatch<StoreDispatch>();
   const [isLiked, setLike] = useState(post.isLiked);
   const publish = usePublish();
@@ -40,7 +40,9 @@ const Post = ({ post }: Props) => {
 
   useEffect(() => {
     if (commentAdded && commentAdded.commentAdded.post?._id === post._id) {
-      setCountComment((prev) => prev + 1);
+      setCountComment((prev) => {
+        return prev + 1;
+      });
     }
   }, [commentAdded]);
 

@@ -1,13 +1,13 @@
-query getComments($post: String!) {
-  getComments(post: $post) {
-    _id
-    text
-    profile {
-      name
-      avatar
-      id
+query getComments($payloadPostComment: PaginationComment!) {
+    getComments(payloadPostComment: $payloadPostComment) {
+        _id
+        text
+        profile {
+            name
+            avatar
+            id
+        }
     }
-  }
 }
 
 

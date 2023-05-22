@@ -1,0 +1,24 @@
+query getNotifications($profile: String!){
+    getNotifications(profile: $profile) {
+        _id
+        groupUserAction {
+            id,
+            name
+            avatar
+        },
+        userReceive
+        post {
+            _id
+            content
+            profile {
+                name
+                id
+                email
+            }
+        }
+        type
+        isRead
+        action
+        deletedAt
+    }
+}

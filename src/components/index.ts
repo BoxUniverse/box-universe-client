@@ -35,4 +35,5 @@ export { default as LongText } from './LongText';
 export { default as BottomBar } from './BottomBar';
 export { default as ModalListConversation } from './ModalListConversation';
 export { default as ModalListFriendConversation } from './ModalListFriendConversation';
+export { default as Notification } from './Notification';
 // @endindex

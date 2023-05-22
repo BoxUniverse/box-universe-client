@@ -5,7 +5,7 @@ import MainLayout from '@layouts/MainLayout';
 import { Avatar } from '@mui/material';
 import { CHANGE_NAME_CONVERSATION, SEND_FILES, SEND_MESSAGE } from '@mutations';
 import { GET_CONVERSATION_BY_ID } from '@queries';
-import { updateModal } from '@src/features/app/modalSlice';
+import { closeModal, updateModal } from '@src/features/app/modalSlice';
 import { updateConversation, updateTypeConversation } from '@src/features/user/conversationSlice';
 import { pushMessages } from '@src/features/user/messageSlice';
 import attachToken from '@src/injection/attachToken';
@@ -29,6 +29,9 @@ import {
 import { MdUploadFile } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { NextPageWithLayout } from './_app';
+import SimplePeer from 'simple-peer';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 type PayloadFile = {
   file: File;
@@ -40,6 +43,7 @@ type PayloadFile = {
 const Chat: NextPageWithLayout = () => {
   const [showIcon, setShowIcon] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
+  const [isCalling, setCall] = useState(false);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const iconEmojiRef = useRef<HTMLDivElement>(null);
   const conversation: any = useSelector<RootState>((state) => state.conversationSlice as any);
@@ -51,6 +55,236 @@ const Chat: NextPageWithLayout = () => {
   const messages: any = useSelector<RootState>((state) => state.messageSlice.messages as any);
   const dispatch = useDispatch<StoreDispatch>();
   const [listFiles, setListFiles] = useState<PayloadFile[]>([]);
+
+  // -----------------------
+
+  const [, setStream] = useState<MediaStream>(null);
+  const [peer, setPeer] = useState<SimplePeer.Instance>(null);
+  const [userVideo, setUserVideo] = useState<any>(null);
+  const [partnerVideo, setPartnerVideo] = useState<any>(null);
+  const [, setCallerSignal] = useState();
+
+  const { modalCallVideo }: any = useSelector<RootState>((state) => state.modalSlice);
+  const [caller, setCaller] = useState(null);
+  const [receiver, setReceiver] = useState(null);
+
+  const { currentConversation }: any = useSelector<RootState>((state) => state.conversationSlice);
+  const toastCall = useToast();
+  const connectionRef = useRef(null);
+
+  const MySwal = withReactContent(Swal);
+  useSubscribe('receiver.ACCEPT_CALL', (payload) => {
+    setReceiver(payload.receiver);
+
+    peer.signal(payload.signalData);
+  });
+
+  useEffect(() => {
+    if (partnerVideo) {
+      dispatch(
+        updateModal({
+          isOpen: true,
+          receiverAccept: true,
+          name: 'modalCallVideo',
+          payload: {
+            userVideo: userVideo,
+            partnerVideo: partnerVideo,
+          },
+        } as any),
+      );
+    }
+  }, [partnerVideo]);
+
+  useSubscribe('receiver.REJECT_CALL', () => {
+    dispatch(closeModal({ name: 'modalCallVideo' } as any));
+    toast('warn', 'Receiver rejected the call');
+  });
+  useEffect(() => {
+    if (isCalling) {
+      (async () => {
+        const stm = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setStream(stm);
+        setUserVideo(stm);
+        const peer = new SimplePeer({
+          initiator: true,
+          stream: stm,
+          trickle: false,
+        });
+
+        setPeer(peer);
+        setCaller({
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar,
+        });
+
+        peer.on('signal', (data) => {
+          // alert('x');
+          publish('messages.CALL', {
+            conversation: currentConversation,
+            signalData: data,
+            caller: {
+              id: user.id,
+              name: user.name,
+              avatar: user.avatar,
+            },
+          });
+        });
+        peer.on('stream', (stream) => {
+          // if (partnerVideo.current) {
+          setPartnerVideo(stream);
+
+          // }
+        });
+        connectionRef.current = peer;
+      })();
+    } else {
+    }
+  }, [isCalling]);
+
+  const startCall = async () => {
+    setCall(true);
+  };
+
+  useSubscribe('messages.USER_OFFLINE', () => {
+    dispatch(
+      updateModal({
+        isOpen: false,
+        receiverAccept: false,
+        name: 'modalCallVideo',
+      } as any),
+    );
+    toast('warn', 'User is offline');
+  });
+  useEffect(() => {
+    if (modalCallVideo.isOpen && !modalCallVideo.receiverAccept) {
+      void startCall();
+    }
+  }, [modalCallVideo]);
+  // useEffect(() => {
+  //   if (modalCallVideo.isOpen) {
+  //     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+  //       setStream(stream);
+  //       userVideo.current.srcObject = stream;
+  //     });
+  //   }
+  // }, [modalCallVideo]);
+
+  const afterCloseModalCallVideo = () => {
+    publish('messages.SELF_REJECT', {
+      conversation: currentConversation,
+      caller: {
+        id: user.id,
+        name: user.name,
+        avatar: user.avatar,
+      },
+    });
+  };
+
+  useSubscribe('messages.SELF_REJECT', () => {
+    MySwal.close();
+    toast('warn', 'The call is rejected');
+    dispatch(
+      updateModal({
+        isOpen: false,
+        receiverAccept: false,
+        name: 'modalCallVideo',
+      } as any),
+    );
+  });
+
+  useSubscribe('messages.INCOMING_CALL', (payload) => {
+    // dispatch(
+    //   updateModalCallVideo({
+    //     isOpen: true,
+    //   }),
+    // );
+    setCallerSignal(payload.signalData);
+
+    const { caller } = payload;
+
+    setCaller(caller);
+    setReceiver(user);
+    MySwal.fire({
+      confirmButtonColor: '#22c55e',
+      cancelButtonColor: '#ef4444',
+      title: ' Incoming Call',
+      text: `${caller.name} is calling you ...`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, accept call',
+      cancelButtonText: 'No, reject call!',
+      color: 'white',
+      background: '#000000a3',
+      allowOutsideClick: false,
+      timer: 100000,
+      timerProgressBar: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const stm = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setUserVideo(stm);
+        const peer = new SimplePeer({
+          initiator: false,
+          stream: stm,
+          trickle: false,
+        });
+
+        peer.on('signal', (data) => {
+          // alert('receiver_accept');
+
+          publish('messages.ACCEPT_CALL', {
+            receiver: {
+              id: user.id,
+              name: user.name,
+              avatar: user.avatar,
+            },
+            signalData: data,
+            caller,
+          });
+        });
+
+        peer.on('stream', (stream) => {
+          setPartnerVideo(stream);
+
+          dispatch(
+            updateModal({
+              isOpen: true,
+              receiverAccept: true,
+              name: 'modalCallVideo',
+              payload: {
+                userVideo: stm,
+                partnerVideo: stream,
+              },
+            } as any),
+          );
+        });
+
+        peer.signal(payload.signalData);
+
+        setPeer(peer);
+
+        connectionRef.current = peer;
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        publish('messages.REJECT_CALL', {
+          receiver: {
+            id: user.id,
+            name: user.name,
+            avatar: user.avatar,
+          },
+          caller,
+        });
+
+        dispatch(
+          updateModal({
+            isOpen: false,
+            name: 'modalCallVideo',
+          } as any),
+        );
+      }
+    });
+  });
+
+  // -----------------------------
 
   const user: any = useSelector<RootState>((state) => state.userSlice.user as any);
   const [send] = useMutation(SEND_MESSAGE);
